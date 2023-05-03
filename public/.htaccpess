@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^journal\\.gu.edu\\.ps$
+RewriteCond %{REQUEST_URI} !^/journal/
+RewriteRule (.*) /journal/$1
+
+</IfModule>

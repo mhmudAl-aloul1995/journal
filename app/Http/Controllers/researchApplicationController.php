@@ -206,7 +206,7 @@ class researchApplicationController extends Controller
                 $user = $user->update(['password' => Hash::make($password)]);
                 $details = [
                     'title' => 'عبادة البحث العلمي',
-                    'url' => "http://10.10.14.189/journal_dev",//url('login'),
+                    'url' => url('evaluator'),//url('login'),
                     'password' => $password,
                     'username' => $username,
                     'email' => $email,

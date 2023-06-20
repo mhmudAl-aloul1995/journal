@@ -19,7 +19,7 @@ class JournalMembers extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
@@ -42,6 +42,6 @@ class JournalMembers extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

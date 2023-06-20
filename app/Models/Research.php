@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Doctrine\DBAL\Driver\IBMDB2\DB2Driver;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Researcher;
 /**
  * @property integer $id
  * @property integer $category_id
@@ -62,7 +62,7 @@ class Research extends Model
      */
     public function category()
     {
-        return $this->belongsTo('App\Category');
+        return $this->belongsTo('App\Models\Category');
     }
 
     /**
@@ -70,7 +70,7 @@ class Research extends Model
      */
     public function user()
     {
-        return $this->belongsToMany('App\User',Researcher::class);
+        return $this->belongsToMany('App\Models\User',Researcher::class);
     }
 
     /**
@@ -78,7 +78,7 @@ class Research extends Model
      */
     public function version()
     {
-        return $this->belongsTo('App\Version');
+        return $this->belongsTo('App\Models\Version');
     }
 
 
@@ -88,6 +88,6 @@ class Research extends Model
      */
     public function researchers()
     {
-        return $this->hasMany('App\Researcher');
+        return $this->hasMany('App\Models\Researcher');
     }
 }

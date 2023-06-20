@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\main;
 
-use App\Category;
-use App\Folder;
+use App\Models\Category;
+use App\Models\Folder;
 use App\Http\Controllers\Controller;
-use App\Research;
-use App\Version;
+use App\Models\Research;
+use App\Models\Version;
 use View;
 use Yajra\Datatables\Enginges\EloquentEngine;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class categoryController extends Controller
 
         $lastVersion = Version::latest('id')->first();
         $allcategory = Category::withCount('researches')->get();
-    
+
 		if ($type == 0) {
             $researches = Research::wherehas('researchers', function ($q)use($id) {
 

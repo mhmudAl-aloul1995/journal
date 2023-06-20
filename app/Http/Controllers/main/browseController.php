@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\main;
 
-use App\Category;
-use App\Folder;
+use App\Models\Category;
+use App\Models\Folder;
 use App\Http\Controllers\Controller;
-use App\Research;
-use App\User;
-use App\Version;
+use App\Models\Research;
+use App\Models\User;
+use App\Models\Version;
 use View;
 use Yajra\Datatables\Enginges\EloquentEngine;
 use Illuminate\Http\Request;
@@ -20,10 +20,15 @@ class browseController extends Controller
     {
         $users = User::wherein('role_id', ['2', '3', '4', '5'])->orderBy('role_id', 'asc')->get();
 
+      /*  foreach (User::all() as $value) {
+            User::find($value->id)->update(['email'=> strtolower($value->email)]);
+
+        }*/
         if ($id > 0) {
-            $users = User::where('id',$id)->get();
+            $users = User::find($id);
         }
-        $role_id = ['', 'باحث', 'رئيس مجلس ادارة المجلة', ' رئيس التحرير', ' مدير التحرير', ' هيئة التحرير'];
+
+        $role_id = ['', 'باحث', 'رئيس مجلس ادارة المجلة', ' رئيس التحرير', ' مدير التحرير', ' هيئة التحرير', '', 'سكرتير المجلة'];
 
 
         return View::make('main/user', compact('users', 'role_id'));
@@ -39,41 +44,41 @@ class browseController extends Controller
         return View::make('main/browse_version', compact('folder'));
 
     }
+
     public function browse_authors_nots()
     {
-
 
 
         return View::make('main/browse_authors_nots');
 
     }
+
     public function browse_scope()
     {
-
 
 
         return View::make('main/browse_scope');
 
     }
+
     public function browse_about()
     {
-
 
 
         return View::make('main/browse_about');
 
     }
+
     public function browse_ethics()
     {
-
 
 
         return View::make('main/browse_ethics');
 
     }
+
     public function browse_condition()
     {
-
 
 
         return View::make('main/browse_condition');
@@ -124,8 +129,9 @@ class browseController extends Controller
 
     }
 
-    public function browse_index_researcher($is_keyword=null,$folder_id = null)
+    public function browse_index_researcher($folder_id = null)
     {
+
 
         $chars = array(
             'ا',
@@ -161,7 +167,7 @@ class browseController extends Controller
         );
         $folders = Folder::with('versions')->orderBy('fldr_no', 'desc')->get();
 
-        return View::make('main/browse_index_researcher', compact('is_keyword','chars', 'folders', 'folder_id'));
+        return View::make('main/browse_index_researcher', compact('chars', 'folders', 'folder_id'));
 
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AllocationDonor;
+use App\Models\Folder;
 use App\Models\ResearchApplication;
 use App\research;
 use App\Models\Category;
@@ -23,18 +24,19 @@ use Illuminate\Support\Facades\DB;
 use View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EvaluationsUser;
+use App\Models\ResearcherEvaluation;
+use App\Models\ResearchApplicationNote;
 
-class researchApplicationController extends Controller
+class evaluatorController extends Controller
 {
 
 
- function __construct()
+    function __construct()
     {
-         $this->middleware('permission:researchApplication-evaluator|researchApplication-list|researchApplication-create|researchApplication-edit|researchApplication-delete', ['only' => ['index','show']]);
-         $this->middleware('permission:researchApplication-create', ['only' => ['create','store']]);
-         $this->middleware('permission:researchApplication-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:researchApplication-delete', ['only' => ['destroy']]);
-         $this->middleware('permission:researchApplication-evaluator', ['only' => ['evaluator','getPublicationManagementEvaluator']]);
+        $this->middleware('permission:evaluator-list|evaluator-create|evaluator-edit|evaluator-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:evaluator-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:evaluator-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:evaluator-delete', ['only' => ['destroy']]);
 
     }
 
@@ -42,146 +44,19 @@ class researchApplicationController extends Controller
     {
 
 
-        $researchApplication = ResearchApplication::all();
-        $user = User::where('id', '!=', 1)->get();
-
-        return View::make('researchApplication', compact('researchApplication', 'user'));
-
-    }
-
-
-    public function publicationManagementView()
-    {
-        $evaluations = User::where('role_id', '8')->get();
-        $user = User::where('id', '!=', 1)->get();
-
-        $data['user'] = $user;
-        $data['evaluations'] = $evaluations;
-        return View::make('publicationManagement', $data);
-    }
-
-    public function evaluator()
-    {
-
         return View::make('evaluator');
-    }
-
-    public function getPublicationManagementEvaluator(Request $request)
-    {
-        $data = $request->all();
-        $users = ResearchApplication::query()->with('user')->select('research_applications.*');
-
-        $users->whereHas('evaluations_users', function ($q) {
-            $q->where('evaluator_id', Auth::id());
-        });
-
-        $users->orderBy('research_applications.id', 'desc');
-        return Datatables::of($users)
-            ->addColumn('res_file', function ($ctr) {
-                return '<a target="_blank" href="' . $ctr->res_file . '">الرابط</a>';
-            })
-            ->addColumn('res_money', function ($ctr) {
-                return '<a target="_blank" href="' . $ctr->res_money . '">الرابط</a>';
-
-            })
-            ->addColumn('action', function ($ctr) {
-
-                return '<div class="btn-group">
-                                                        <button  class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> إجراء
-                                                            <i class="fa fa-angle-down"></i>
-                                                        </button>
-                                                        <ul  class="dropdown-menu" role="menu">
 
 
-                                                            <li>
-                                                                <a onclick="showModal(`researchApplication`,' . $ctr->id . ')" href="javascript:;">
-                                                                    <i class="icon-pencil"></i> تعديل </a>
-                                                            </li>
-                                                            <li>
-                                                                <a onclick="deleteThis(`researchApplication`,' . $ctr->id . ')"  href="javascript:;">
-                                                                    <i class="icon-trash"></i> حذف  </a>
-                                                            </li>
-                                                            </ul>
-                                                    </div>';
-            })
-            ->rawColumns(['action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
-            ->make(true);
-    }
-
-    public function getPublicationManagement(Request $request)
-    {
-        $data = $request->all();
-        $users = ResearchApplication::query()->with('user')->select('research_applications.*');
-
-        $status = ['', 'info', 'warning', 'danger', 'primary'];
-        $status1 = ['', 'ارفاق الطلب', 'تحكيم البحث', 'تدقيق لغوي', 'الموافقة على النشر'];
-        $changeStatus = [1 => 'الموافقة على الطلب', 2 => 'لحنة تحكيم', 3 => 'تدقيق لغوي', 4 => 'جاهز للنشر'];
-        if (Auth::id() != 1) {
-            $users->where('user_id', Auth::id());
-        }
-
-        $users->orderBy('research_applications.id', 'desc');
-        return Datatables::of($users)
-            ->addColumn('is_pay', function ($ctr) {
-
-                if ($ctr->is_pay == 1) {
-                    return ' <span ondblclick="showResearchApplicationPayModal(' . $ctr->id . ',' . $ctr->is_pay . ')"  class="label label-sm label-info">قيد الفحص</span>';
-                } else if ($ctr->is_pay == 2) {
-
-                    return ' <span ondblclick="showResearchApplicationPayModal(' . $ctr->id . ',' . $ctr->is_pay . ')" class="label label-sm label-success"> مدفوع</span>';
-                } else if ($ctr->is_pay == 0) {
-
-                    return ' <span ondblclick="showResearchApplicationPayModal(' . $ctr->id . ',' . $ctr->is_pay . ')" class="label label-sm label-danger">غير مدفوع</span>';
-                }
-
-            })
-            ->addColumn('res_file', function ($ctr) {
-                return '<a target="_blank" href="' . $ctr->res_file . '">الرابط</a>';
-            })
-            ->addColumn('res_money', function ($ctr) {
-                return '<a target="_blank" href="' . $ctr->res_money . '">الرابط</a>';
-
-            })
-            ->addColumn('app_status', function ($ctr) use ($status, $status1) {
-
-                return ' <span ondblclick="showResearchApplicationStatusModal(' . $ctr->id . ',' . $ctr->app_status . ')" class="label label-sm label-' . $status[$ctr->app_status] . '">' . $status1[$ctr->app_status] . '</span>';
-
-            })
-            ->addColumn('action', function ($ctr) use ($changeStatus) {
-
-                return '<div class="btn-group">
-                                                        <button  class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> إجراء
-                                                            <i class="fa fa-angle-down"></i>
-                                                        </button>
-                                                        <ul  class="dropdown-menu" role="menu">
-
-                                                            <li>
-                                                                <a onclick="showResearchApplicationPayModal(' . $ctr->id . ',' . $ctr->is_pay . ')" href="javascript:;">
-                                                                    <i class="icon-puzzle"></i> حالة الدفع </a>
-                                                            </li>
-                                                            <li>
-                                                                <a onclick="showModal(`researchApplication`,' . $ctr->id . ')" href="javascript:;">
-                                                                    <i class="icon-pencil"></i> تعديل </a>
-                                                            </li>
-                                                            <li>
-                                                                <a onclick="deleteThis(`researchApplication`,' . $ctr->id . ')"  href="javascript:;">
-                                                                    <i class="icon-trash"></i> حذف  </a>
-                                                            </li>
-                                                            </ul>
-                                                    </div>';
-            })
-            ->rawColumns(['action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
-            ->make(true);
     }
 
     public function edit(Request $request, $id)
     {
 
-        $researchApplication = ResearchApplication::where('id', $id)->first();
+        $researchEvaluation = ResearcherEvaluation::where('id', $id)->first();
 
-        if ($researchApplication) {
+        if ($researchEvaluation) {
             return response()->json([
-                'researchApplication' => $researchApplication,
+                'evaluator' => $researchEvaluation,
                 'success' => TRUE,
             ]);
         }
@@ -189,31 +64,127 @@ class researchApplicationController extends Controller
 
     }
 
-    public function researchApplicationPay(Request $request)
+
+    public function show(Request $request)
     {
         $data = $request->all();
 
-        $data['user_id'] = Auth::id();
+        $users = ResearchApplication::query();
+        $users->where('app_status', '2');
+        $users->whereHas('evaluations_users', function ($q) {
+            $q->where('evaluator_id', Auth::id());
+        });
 
-        $request->validate([
-            "is_pay" => "required",
-            "app_id" => "required",
+        $users->withCount(['user', 'evaluator_evaluations', 'evaluator_evaluations as evaluator_count' => function ($query) {
+            $query->where('evaluator_id', Auth::id());
+        }]);
 
-        ]);
+        $users->orderBy('research_applications.id', 'desc');
 
-        $pay = ResearchApplication::find($data['app_id']);
-        if ($data['is_pay'] == 2) {
-            $data['app_status'] = 2;
-            $pay->update(['is_pay' => $data['is_pay'], 'app_status' => $data['app_status']]);
+        return Datatables::of($users)
+            ->addColumn('res_file', function ($ctr) {
+                return '<a target="_blank" href="' . $ctr->res_file . '">الرابط</a>';
+            })
+            ->addColumn('res_money', function ($ctr) {
+                return '<a target="_blank" href="' . $ctr->res_money . '">الرابط</a>';
 
-        } else {
-            $data['app_status'] = 1;
+            })
+            ->addColumn('showNotes', function ($ctr) {
+                return '<span onclick="showNotes(this,' . $ctr->id . ')" >' . $ctr->id . '</span>';
 
-            $pay->update(['is_pay' => $data['is_pay'], 'app_status' => $data['app_status']]);
+            })
+            ->addColumn('action', function ($ctr) {
+                //  $researcherEvaluation = ResearcherEvaluation::where(['evalautor_id' => Auth::id(), 'research_applications' => $ctr->id])->first();
+
+
+                $action = $ctr->evaluator_count > 0 ? '<span style="color: white;"  class="btn btn-danger" onclick="showModal(`evaluator`,' . $ctr->evaluator_evaluations->id . ')" >' : '<span style="color: white;"  class="btn btn-danger" onclick="resercherEvaluation(' . $ctr->id . ')">';
+
+                return $action . '<i class="icon-badge"></i> تقييم</span>
+
+                                                        ';
+            })
+            ->rawColumns(['showNotes' => 'showNotes', 'action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
+            ->setRowId(function ($user) {
+                return "app_" . $user->id;
+            })
+            ->make(true);
+    }
+
+    public function researchAppNoteShow(Request $request)
+    {
+        $data = $request->all();
+
+        $is_researcher = Auth::user()->hasAnyRole(['باحث']);
+        $users = ResearchApplicationNote::query();
+        $research_application_id = isset($data['research_application_id']) && $data['research_application_id'] != null ? $data['research_application_id'] : '';
+
+        if ($is_researcher == false) {
+            $users->whereHas('evaluator', function ($q) {
+                $q->where('evaluator_id', Auth::id());
+            });
+        }
+        $users->whereHas('research_application', function ($q) use ($research_application_id) {
+            $q->where('research_application_id', $research_application_id);
+        });
+
+
+        return Datatables::of($users)
+            ->addColumn('is_done', function ($ctr) {
+                $is_done = $ctr->is_done == 1 ? "نعم" : "لا";
+                $is_done_class = $ctr->is_done == 0 ? "label-danger" : "label-success";
+                return "<span style='width: 500px;' class=' label label-large {$is_done_class}'>{$is_done}</span>";
+
+            })
+            ->addColumn('note_file', function ($ctr) {
+                return '<a target="_blank" href="' . $ctr->note_file_updated . '">الرابط</a>';
+            })
+            ->addColumn('action', function ($ctr) use ($is_researcher) {
+                $action = '';
+                if ($is_researcher == true) {
+                    $action = ' <li>
+                                                                <a onclick="setIsDone(`1`,' . $ctr->id . ')" href="javascript:;">
+                                                                    <i class="fa fa-check-square"></i> تم التنفيذ </a>
+                                                            </li>
+                                                            <li>
+                                                                <a onclick="setIsDone(`0`,' . $ctr->id . ')"  href="javascript:;">
+                                                                    <i class="fa fa-times"></i> لم يتم التنفيذ  </a>
+                                                            </li>';
+                } else {
+                    $action = '
+                                                            <li>
+                                                                <a onclick="deleteThis(`researchAppNoteDelete`,' . $ctr->id . ')"  href="javascript:;">
+                                                                    <i class="icon-trash"></i> حذف  </a>
+                                                            </li>';
+                }
+                return '<div class="btn-group">
+                                                        <button  class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> إجراء
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </button>
+                                                        <ul  class="dropdown-menu" role="menu">
+                                                           ' . $action . '
+                                                            </ul>
+                                                    </div>';
+            })
+            ->rawColumns(['note_file' => 'note_file', 'action' => 'action', 'is_done' => 'is_done', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
+            ->make(true);
+    }
+
+    public function addEvaluatorNotes(Request $request)
+    {
+        $data = $request->all();
+        $data['is_done'] = 0;
+        $data['evaluator_id'] = Auth::id();
+        if ($request->note_file && $request->file()) {
+
+            $fileName = time() . '_' . $request->note_file->getClientOriginalName();
+            $filePath = $request->file('note_file')->storeAs('note_file', $fileName);
+            $data['note_file'] = $fileName;
 
         }
 
-        if (!$pay) {
+        $research = ResearchApplicationNote::create($data);
+
+        if (!$research) {
 
             return response()->json([
                 'success' => FALSE,
@@ -224,83 +195,18 @@ class researchApplicationController extends Controller
         return response()->json([
             'success' => TRUE,
             'message' => "تم الإدخال بنجاح",
-            'research' => $pay
+            'research' => $research
 
 
         ]);
-    }
-
-    public function researchApplicationStatus(Request $request)
-    {
-        $data = $request->all();
-
-
-        //  $data['user_id'] = Auth::id();
-        if ($data['app_status'] == 2) {
-
-
-            $EvaluationsUser = null;
-            foreach ($data['user_id'] as $value) {
-                $user = User::find($value)->update(['password' => Hash::make('123456')]);
-                $EvaluationsUser = EvaluationsUser::updateOrCreate(['evaluator_id' => $value, 'researcha_application_id' => $data['research_id']]);
-
-            }
-
-
-            if (!$EvaluationsUser) {
-
-                return response()->json([
-                    'success' => FALSE,
-                    'message' => "حدث حطأ أثناء الإدخال"
-                ]);
-            }
-
-            return response()->json([
-                'success' => TRUE,
-                'message' => "تم الإدخال بنجاح",
-                'research' => $EvaluationsUser
-
-
-            ]);
-        }
     }
 
     public function store(Request $request)
     {
         $data = $request->all();
 
-        $data['user_id'] = Auth::id();
-        $data['is_pay'] = 1;
-        if (isset($data['is_commitment']) && $data['is_commitment'] == 1) {
-            $request->validate([
-                "research_money_file" => "required",
-
-            ]);
-        } else {
-            $request->validate([
-                "research_money_file" => "required",
-                "research_file" => "required",//|mimetypes:application/pdf
-                "research_title" => "required",//|mimetypes:application/pdf
-            ]);
-        }
-
-        if ($request->research_money_file && $request->file()) {
-
-            $fileName = time() . '_' . $request->research_money_file->getClientOriginalName();
-            $filePath = $request->file('research_money_file')->storeAs('research_money_file', $fileName);
-            $data['research_money_file'] = $fileName;
-
-        }
-        if ($request->research_file && $request->file()) {
-
-            $fileName = time() . '_' . $request->research_file->getClientOriginalName();
-            $filePath = $request->file('research_file')->storeAs('research_file', $fileName);
-            $data['research_file'] = $fileName;
-
-        }
-        $data['app_status'] = 1;
-
-        $research = ResearchApplication::updateOrCreate(['id' => $data['id']], $data);
+        $data['evaluator_id'] = Auth::id();
+        $research = ResearcherEvaluation::create($data);
 
         if (!$research) {
 
@@ -323,41 +229,17 @@ class researchApplicationController extends Controller
     {
         $data = $request->all();
 
+        $ResearcherEvaluation = ResearcherEvaluation::find($data['id']);
 
-        $research = research::find($data['id']);
-        if ($request->file()) {
-            if (!$request->validate([
-                "res_link" => "required|mimetypes:application/pdf"
-            ])) {
-                return response()->json([
-                    'success' => FALSE,
-                    'message' => "يجب أن يكون الملف pdf"
-
-                ]);
-            }
-            $fileName = time() . '_' . $request->res_link->getClientOriginalName();
-            $filePath = $request->file('res_link')->storeAs('researches', $fileName);
-            $data['res_link'] = '/storage/app/' . $filePath;
-
-        }
-
-        $research->update($data);
+        $ResearcherEvaluation->update($data);
 
 
-        if (!$research) {
+        if (!$ResearcherEvaluation) {
             return response()->json([
                 'success' => TRUE,
                 'message' => "حدث حطأ أثناء التعديل"
 
             ]);
-        }
-        if ($data['researchers']) {
-            Researcher::where('research_id', $research->id)->delete();
-
-            foreach ($data['researchers'] as $value) {
-                Researcher::create(['user_id' => $value, 'research_id' => $research->id]);
-            }
-
         }
         return response()->json([
             'success' => TRUE,
@@ -365,14 +247,13 @@ class researchApplicationController extends Controller
         ]);
     }
 
-    public
-    function destroy(Request $request, $id)
+
+    public function researchAppNoteDelete(Request $request, $id)
     {
 
-        $researchers = Researcher::where('research_id', $id)->delete();
+        $researchAppNoteDelete = ResearchApplicationNote::find($id)->delete();
 
-        $research = Research::find($id)->delete();
-        if ($research) {
+        if ($researchAppNoteDelete) {
             return response()->json([
                 'message' => 'تمت العملية بنجاح',
                 'success' => TRUE,
@@ -381,6 +262,5 @@ class researchApplicationController extends Controller
 
         return response(['message' => 'فشلت العملية'], 500);
     }
-
 
 }

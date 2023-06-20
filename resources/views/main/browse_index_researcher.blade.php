@@ -62,8 +62,7 @@
                                 </div>
 
                                 <ul class="list-inline categories nomargin">
-                                    <?php $researchers = \App\Researcher::with('user', 'research')
-
+                                    <?php $researchers = \App\Models\Researcher::with('user', 'research')
                                         ->wherehas('user', function ($q) use ($value) {
                                             $q->where('name', 'LIKE', $value . '%')->orderBy('name', 'asc');
                                         });
@@ -77,24 +76,29 @@
                                     }
 
                                     ?>
-                                    @foreach($researchers->get() as $res)
 
-                                        <li class="atomic-item padding-3" style="display:block">
+                                    @foreach($researchers->wherehas('research')->get() as $res)
+                                        {{ $res->id}}
 
-                                            <a class="atomic-title text-dark block size-14"
-                                               href="{{url('article').'/'.$res->research->id}}">
-                                                @foreach($res->user as $user)
-                                                    {{$user->name.','}}
-                                                @endforeach
-                                            </a>
-                                            <span class="wight-300 size-12 block"
-                                                  style="color:#999;padding:4px 8px 10px 8px">
+
+
+                                            <li class="atomic-item padding-3" style="display:block">
+
+
+                                                <a class="atomic-title text-dark block size-14"
+                                                   href="{{url('article').'/'.$res->research->id}}">
+                                                    @foreach($res->user as $user)
+                                                        {{$user->name.','}}
+                                                    @endforeach
+                                                </a>
+                                                <span class="wight-300 size-12 block"
+                                                      style="color:#999;padding:4px 8px 10px 8px">
                                                 {{$res->research->res_title}}
 
                                                 <strong>
                                                     [المجلد {{$res->research->version->folder->fldr_no}}، العدد {{$res->research->version->vr_no}} ، الصفحة {{$res->research->page_from.'-'.$res->research->page_to}} ]</strong>
                                             </span>
-                                        </li>
+                                            </li>
                                     @endforeach
 
 

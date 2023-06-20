@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\main;
 
-use App\Category;
-use App\Folder;
+use App\Models\Category;
+use App\Models\Folder;
 use App\Http\Controllers\Controller;
-use App\Research;
-use App\Version;
+use App\Models\Research;
+use App\Models\Version;
 use Illuminate\Database\Eloquent\Builder;
 use View;
 use Yajra\Datatables\Enginges\EloquentEngine;

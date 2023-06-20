@@ -66,7 +66,7 @@ class User extends Authenticatable
      */
     public function categories()
     {
-        return $this->hasMany('App\Category');
+        return $this->hasMany('App\Models\Category');
     }
 
     /**
@@ -74,7 +74,7 @@ class User extends Authenticatable
      */
     public function folders()
     {
-        return $this->hasMany('App\Folder');
+        return $this->hasMany('App\Models\Folder');
     }
 
     /**
@@ -98,7 +98,7 @@ class User extends Authenticatable
      */
     public function keywords()
     {
-        return $this->hasMany('App\Keyword');
+        return $this->hasMany('App\Models\Keyword');
     }
 
     /**
@@ -106,7 +106,7 @@ class User extends Authenticatable
      */
     public function researches()
     {
-        return $this->hasMany('App\Research');
+        return $this->hasMany('App\Models\Research');
     }
 
     /**
@@ -114,6 +114,6 @@ class User extends Authenticatable
      */
     public function versions()
     {
-        return $this->hasMany('App\Version');
+        return $this->hasMany('App\Models\Version');
     }
 }

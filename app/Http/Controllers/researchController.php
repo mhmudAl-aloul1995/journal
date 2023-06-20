@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\AllocationDonor;
-use App\research;
-use App\Category;
-use App\Journal;
-use App\Researcher;
-use App\user;
-use App\Donor;
-use App\Municipality;
-use App\Product;
-use App\Stage;
-use App\Version;
+use App\Models\Research;
+use App\Models\Category;
+use App\Models\Researcher;
+use App\Models\User;
+use App\Models\Version;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Project;
 use Yajra\Datatables\Datatables;
@@ -25,7 +20,13 @@ use Illuminate\Support\Facades\Auth;
 class researchController extends Controller
 {
 
-
+    function __construct()
+    {
+        $this->middleware('permission:research-list|research-create|research-edit|research-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:research-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:research-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:research-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
 
@@ -41,17 +42,42 @@ class researchController extends Controller
     public function show(Request $request)
     {
         $data = $request->all();
+        $users = Research::query()->with('user');
 
-        $users = Research::query()->with('user')->orderBy('id','desc');
+        if (isset($data['researchers'])) {
+            $researchers = $data['researchers'];
 
-        if (Auth::id() != 1) {
-            $users->where('user_id', Auth::id());
+            $users->whereHas('researchers', function ($q) use ($researchers) {
+                $q->whereIn('user_id', $researchers);
+
+            });
         }
+        if (isset($data['page_from']) &&!isset($data['page_to'])) {
+            $users->where('page_from', $data['page_from']);
+
+        }
+        if (isset($data['page_to']) &&!isset($data['page_from'])) {
+            $users->where('page_to', $data['page_to']);
+
+        }
+        if (isset($data['page_from']) && isset($data['page_to'])) {
+
+            $users->where(function ($query) use ($data) {
+            $from=$data['page_from'];
+            $to=$data['page_to'];
+                $query->where('page_from', '>=',$from);
+                $query->where('page_to', '<=',$to);
+
+            });
+        }
+
+
+       $users ->orderBy('page_from', 'asc');
         return Datatables::of($users)
             ->editColumn('user', function ($ctr) {
 
-                foreach ($ctr->user as $value){
-                    return $value->name.'--'.$value->id.'--';
+                foreach ($ctr->user as $value) {
+                    return $value->name . '--' . $value->id . '--';
                 }
             })
             ->editColumn('res_link', function ($ctr) {
@@ -100,7 +126,8 @@ class researchController extends Controller
 
         unset($data['id']);
         $data['user_id'] = Auth::id();
-        $get_last_version =1;// Version::latest()->first()['id'];
+
+        $get_last_version = 1;// Version::latest()->first()['id'];
         if (!$get_last_version) {
             return response()->json([
                 'success' => FALSE,
@@ -205,7 +232,7 @@ class researchController extends Controller
     public function destroy(Request $request, $id)
     {
 
-        $researchers = Researcher::where('research_id',$id)->delete();
+        $researchers = Researcher::where('research_id', $id)->delete();
 
         $research = Research::find($id)->delete();
         if ($research) {

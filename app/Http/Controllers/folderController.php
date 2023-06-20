@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Bill;
-use App\folder;
+use App\Models\Folder;
 
-use App\Version;
+use App\Models\Version;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Project;
 use Yajra\Datatables\Datatables;
@@ -17,7 +17,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class folderController extends Controller
 {
-
+    function __construct()
+    {
+        $this->middleware('permission:folder-list|folder-create|folder-edit|folder-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:folder-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:folder-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:folder-delete', ['only' => ['destroy']]);
+    }
 
     public function index()
     {

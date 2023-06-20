@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,7 @@ class Folder extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
@@ -34,7 +34,7 @@ class Folder extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
@@ -42,6 +42,6 @@ class Folder extends Model
      */
     public function versions()
     {
-        return $this->hasMany('App\Version');
+        return $this->hasMany('App\Models\Version');
     }
 }

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\user;
+use App\Models\ResearchApplication;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Project;
@@ -12,16 +13,27 @@ use Illuminate\Support\Facades\DB;
 use View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Hash;
+use Spatie\Permission\Models\Role;
 
 class userController extends Controller
 {
-
+    /*
+        function __construct()
+        {
+            $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'show']]);
+            $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
+            $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+            $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+        }*/
 
     public function index()
     {
 
 
-        return View::make('user');
+        $data['user'] = User::all();
+        $data['roles'] = Role::all();
+        return View::make('user', $data);
 
     }
 
@@ -29,15 +41,24 @@ class userController extends Controller
     public function show(Request $request)
     {
         $data = $request->all();
+        $users = User::query()->with('roles')->where('id', '!=', Auth::id());
+        if (isset($data['research_application_id'])) {
+            $research_application_id = $data['research_application_id'];
 
+            $users->whereHas('proofreader', function ($q) use ($research_application_id) {
+                $q->where('id', $research_application_id);
+            });
+        }
 
-        $users = User::where('id', '!=', 1)->orderBy('name','asc')->get();
+        return Datatables::of($users->get())
+            ->addColumn('roles', function ($ctr) {
+                $roles = '';
+                $color = ['', '#e91e63', '#4caf50', '#00bcd4', '#ff5722', '#9c27b0', '#cddc39', '#4caf50', '#009688', '#673ab7', '#4caf50',];
+                foreach ($ctr->roles as $key => $value) {
+                    $roles .= '<span  style=" font-size:70%;  margin:1px; color:white;background-color:' . $color[$value->id] . '" class=" btn  btn-group-red">' . $value->name . '</span>';
+                }
+                return $roles;
 
-
-        return Datatables::of($users)
-            ->editColumn('role_id', function ($ctr) {
-                $role_id = ['', 'باحث', 'المشرف العام', ' رئيس التحرير', ' مدير التحرير', ' هيئة التحرير','سكرتير المجلة','مدقق لغوي'];
-                return $role_id[$ctr->role_id];
             })
             ->addColumn('action', function ($ctr) {
 
@@ -57,17 +78,19 @@ class userController extends Controller
                                                             </ul>
                                                     </div>';
             })
-            ->rawColumns(['action' => 'action', 'user_img' => 'user_img'])
+            ->rawColumns(['action' => 'action', 'roles' => 'roles'])
             ->make(true);
     }
 
     public function edit(Request $request, $id)
     {
 
-        $user = User::find($id);
+        $user = User::with('roles')->find($id);
+
+
         if ($user) {
             return response()->json([
-                'user' => $user
+                'user' => $user,
             ]);
         }
         return response(['message' => 'فشلت العملية'], 500);
@@ -78,33 +101,69 @@ class userController extends Controller
     {
         $data = $request->all();
 
+        $this->validate($request, [
+            'email' => 'required|email|unique:users,email',
+            'roles' => 'required'
+        ]);
         unset($data['id']);
-        //   $data['user_id'] = Auth::id();
+
+        $data['password'] = Hash::make($data['name']);
+        $user = null;
+        // DB::transaction(function () use ($data, $request) {
+
         $user = User::create($data);
+        if (isset($data['research_application_id']) && $data['research_application_id']) {
 
-        if (!$user) {
+            ResearchApplication::find($data['research_application_id'])->update(['proofreader_id' => $user->id]);
+        }
+        $user->assignRole($request->input('roles'));
 
+        if ($user) {
             return response()->json([
-                'success' => FALSE,
-                'message' => "حدث حطأ أثناء الإدخال"
+                'success' => TRUE,
+                'message' => "تم الإدخال بنجاح"
 
             ]);
         }
+        //  });
 
         return response()->json([
-            'success' => TRUE,
-            'message' => "تم الإدخال بنجاح"
+            'success' => FALSE,
+            'message' => "حدث حطأ أثناء الإدخال"
 
         ]);
+
     }
 
     public function update(Request $request)
     {
         $data = $request->all();
+        $data = array_filter($data);
+
+        if ($request->file()) {
+            if (!$request->validate([
+                "avatar" => "required"
+            ])) {
+                return response()->json([
+                    'success' => FALSE,
+                    // 'message' => "يجب أن يكون الملف pdf"
+
+                ]);
+            }
+            $fileName = time() . '_' . $request->avatar->getClientOriginalName();
+            $filePath = $request->file('avatar')->storeAs('avatar', $fileName);
+            $data['img'] = $fileName;//'/storage/app/' . $filePath;
+
+        }
+
         $user = user::find($data['id']);
         $user->update($data);
 
+        if (isset($data['roles']) && $data['roles'] != null) {
 
+            DB::table('model_has_roles')->where('model_id', $data['id'])->delete();
+            $user->assignRole($data['roles']);
+        }
         if (!$user) {
             return response()->json([
                 'success' => TRUE,
@@ -114,6 +173,7 @@ class userController extends Controller
         }
         return response()->json([
             'success' => TRUE,
+            'avatar' => $user->avatar,
             'message' => "تم التعديل بنجاح"
         ]);
     }
@@ -124,7 +184,7 @@ class userController extends Controller
         if (user::find($id)->delete()) {
             return response()->json([
                 'message' => 'تمت العملية بنجاح',
-                'success'=>true
+                'success' => true
             ]);
         }
 

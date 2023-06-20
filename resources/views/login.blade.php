@@ -260,8 +260,8 @@ License: You must have a valid license purchased only from themeforest(the above
             <label class="control-label visible-ie8 visible-ie9">إسم المستخدم</label>
             <div class="input-icon">
                 <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="إسم المستخدم"
-                       name="name"/></div>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="الإيميل"
+                       name="email"/></div>
         </div>
         <div class="form-group">
             <label class="control-label visible-ie8 visible-ie9">كلمة المرور</label>
@@ -272,8 +272,7 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         <div class="form-actions">
             <label class="rememberme mt-checkbox mt-checkbox-outline">
-                <input type="checkbox" name="remember" value="1"/> تذكرني
-                <span></span>
+                <a style=" color: white; " href="{{ route('forget.password.get') }}">نسيت كلمة المرور</a>
             </label>
             <button type="submit" class="btn green pull-right"> دخول</button>
         </div>
@@ -284,7 +283,7 @@ License: You must have a valid license purchased only from themeforest(the above
 </div>
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
-<div class="copyright"> 2023 &copy;Gaza University</div>
+<div class="copyright"> 2023 Gaza University</div>
 <!-- END COPYRIGHT -->
 <!--[if lt IE 9]>
 <script src="assets/global/plugins/respond.min.js"></script>
@@ -335,8 +334,9 @@ License: You must have a valid license purchased only from themeforest(the above
                 errorClass: 'help-block', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
                 rules: {
-                    name: {
-                        required: true
+                    email: {
+                        required: true,
+                        email: true
                     },
                     password: {
                         required: true
@@ -346,11 +346,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     }
                 },
                 messages: {
-                    name: {
-                        required: "إسم المستخدم مطلوب"
+                    email: {
+                        required: " الإيميل مطلوب",
+                        email: "يرجى إدخال عنوان بريد إلكتروني صالح."
                     },
                     password: {
-                        required: "كلمة المرور مطلوب"
+                        required: "كلمة المرور مطلوبة"
                     }
                 },
                 invalidHandler: function (event, validator) { //display error alert on form submit
@@ -380,7 +381,7 @@ License: You must have a valid license purchased only from themeforest(the above
                     });
 
                     $.ajax({
-                        url: "{{url('login')}}",
+                        url: "{{url('admin')}}",
                         data: formData,
                         cache: false,
                         contentType: false,
@@ -388,7 +389,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         type: 'POST',
                         success: function (data) {
                             if (data.success) {
-                                location.href = "{{url('/research')}}"
+                                location.href = "{{url('/profile')}}"
                             } else {
                                 showAlertMessage('alert-danger', ' نظام الدخول / ', data.message);
 
@@ -481,18 +482,20 @@ License: You must have a valid license purchased only from themeforest(the above
             init: function () {
 
                 handleLogin();
-                handleForgetPassword();
-                handleRegister();
+               // handleForgetPassword();
+               // handleRegister();
 
                 // init background slide images
                 $.backstretch([
-                        "{{url('assets/pages/media/bg/1.jpg')}}",
-                        "{{url('assets/pages/media/bg/2.jpg')}}",
-                        "{{url('assets/pages/media/bg/3.jpg')}}",
-                        "{{url('assets/pages/media/bg/4.jpg')}}"
+                        "{{url('assets/pages/1.jpg')}}",
+                        "{{url('assets/pages/2.jpg')}}",
+                        "{{url('assets/pages/3.jpg')}}",
+                        "{{url('assets/pages/4.jpg')}}",
+                        "{{url('assets/pages/5.jpg')}}",
+                        "{{url('assets/pages/6.jpg')}}"
                     ], {
                         fade: 1000,
-                        duration: 8000
+                        duration: 1000
                     }
                 );
             }

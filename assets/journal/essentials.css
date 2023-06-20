@@ -1,5 +1,7 @@
-@import "cstm.css";
-@import url('../../themes/base/front/assets/css/font-awesome.min.css');
+
+@import url('/assets/global/plugins/font-awesome/css/font-awesome.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+@import url('https://www.flaticon.com/free-icon/facebook_733547?term=social+media&page=1&position=11&origin=tag&related_id=733547');
 
 button::-moz-focus-inner,
 input::-moz-focus-inner {
@@ -546,12 +548,12 @@ div.toggle{margin:10px 0 0;position:relative;clear:both}div.toggle > label{color
 #ar_doi {text-transform: uppercase;}
 .madal-aw{
     position: relative;
-    display: table; 
-    overflow-y: auto;    
+    display: table;
+    overflow-y: auto;
     overflow-x: auto;
     width: auto;
-    min-width: 300px; 
-    max-width: 100%;  
+    min-width: 300px;
+    max-width: 100%;
 }
 .edb_min_height{
 	min-height: 270px !important;

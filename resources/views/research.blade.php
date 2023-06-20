@@ -58,19 +58,20 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div   class="col-md-12">
-                                            <div  class="form-group form-md-line-input">
+                                        <div class="col-md-12">
+                                            <div class="form-group form-md-line-input">
                                                 <label for="researchers" class="col-md-2  control-label">المؤلفون
 
                                                 </label>
-                                                <div   class="col-md-4">
-                                                    <select multiple  required
+                                                <div class="col-md-4">
+                                                    <select multiple required
                                                             data-placeholder="المؤلفون"
                                                             name="researchers[]"
                                                             class="form-control select2  ">
 
                                                         @foreach ($user as $value)
-                                                            <option value="{{ $value->id }}">{{ $value->name.''.$value->id }}</option>
+                                                            <option
+                                                                value="{{ $value->id }}">{{ $value->name.'-'.$value->id }}</option>
 
                                                         @endforeach
 
@@ -141,7 +142,7 @@
                                                 <label for="res_link" class="col-md-2  control-label"> البحث كامل
                                                 </label>
                                                 <div class="col-md-10">
-                                                    <input  type="file" name="res_link" value=""
+                                                    <input type="file" name="res_link" value=""
                                                            class="form-control" placeholder="البحث كامل">
                                                     </input>
                                                     <div class="form-control-focus"></div>
@@ -203,7 +204,7 @@
         </div>
     </div>
 
-   {{-- <div class="row">
+    <div class="row">
         <div class="col-md-12">
             <!-- BEGIN CONDENSED TABLE PORTLET-->
             <div class="portlet box green">
@@ -213,55 +214,102 @@
                         <i class="fa fa-search"></i>فلاتر البحث
                     </div>
                     <div class="actions">
-                        <a id="public_search" href="javascript:;" class="btn btn-default btn-sm">
-                            <i class="fa fa-search"></i> بحث </a>
+                        <a style="color: white;" id="public_search" href="javascript:;" class="btn btn-default btn-sm">
+                            <i style="color: white;" class="fa fa-search"></i> بحث </a>
                     </div>
 
                 </div>
                 <div class="portlet-body collapse1">
                     <div style=" " class="row">
-                        --}}{{--
-                                                <div class="col-md-4" id="date">
-                                                    <div class="form-group form-md-line-input ">
-                                                        <label class="col-md-4 control-label" for="dob_search">تاريخ الميلاد</label>
-                                                        <div class="col-md-8">
-                                                            <div id="datePicker1" class="input-group  date date-picker"
-                                                                 data-date-format="yyyy-mm-dd">
-                                                                <input id="dob_search" placeholder="تاريخ الميلاد" type="text"
-                                                                       class="form-control">
-                                                                <span class="input-group-btn">
-                                                                <button class="btn default" type="button"><i
-                                                                        class="fa fa-calendar"></i></button>
-                                                            </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                        --}}{{--
-                        <input type="hidden" value="false" name="offer" id="offer">
-
                         <div class="col-md-4">
-                            <div class="form-group form-md-line-input ">
+                            <div class="form-group form-md-line-input">
+                                <label for="researchers" class="col-md-4  control-label">المؤلفون
 
-                                <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012"
-                                     data-date-format="yyyy-mm-dd">
-                                    <input id="date_from" placeholder="التاريخ من" type="text" class="form-control"
-                                           name="from">
-                                    <span class="input-group-addon"> إلى </span>
-                                    <input id="date_to" placeholder="التاريخ إلى" type="text" class="form-control"
-                                           name="to"></div>
+                                </label>
+                                <div class="col-md-8">
+                                    <select id="researchers" multiple required
+                                            data-placeholder="المؤلفون"
+                                            name="researchers[]"
+                                            class="form-control select2  ">
 
+                                        @foreach ($user as $value)
+                                            <option value="{{ $value->id }}">{{ $value->name.'-'.$value->id }}</option>
+
+                                        @endforeach
+
+
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
+                        {{--                    <div class="col-md-4" id="date">
+                                                <div class="form-group form-md-line-input ">
+                                                    <label class="col-md-4 control-label" for="dob_search">تاريخ الميلاد</label>
+                                                    <div class="col-md-8">
+                                                        <div id="datePicker1" class="input-group  date date-picker"
+                                                             data-date-format="yyyy-mm-dd">
+                                                            <input id="dob_search" placeholder="تاريخ الميلاد" type="text"
+                                                                   class="form-control">
+                                                            <span class="input-group-btn">
+                                                            <button class="btn default" type="button"><i
+                                                                    class="fa fa-calendar"></i></button>
+                                                        </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                    <input type="hidden" value="false" name="offer" id="offer">
+
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input ">
+
+                            <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012"
+                                 data-date-format="yyyy-mm-dd">
+                                <input id="date_from" placeholder="التاريخ من" type="text" class="form-control"
+                                       name="from">
+                                <span class="input-group-addon"> إلى </span>
+                                <input id="date_to" placeholder="التاريخ إلى" type="text" class="form-control"
+                                       name="to"></div>
+
+                        </div>
+                    </div>--}}
+                        <div class="col-md-4">
+                                <div class="form-group form-md-line-input">
+                                    <label for="page_from" class="col-md-4  control-label"> الصفحة من
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input required="" id="page_from" type="number" name="page_from" value=""
+                                               class="form-control" placeholder="الصفحة من">
+                                        </input>
+                                        <div class="form-control-focus"></div>
+                                    </div>
+                                </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                                <div class="form-group form-md-line-input">
+                                    <label for="page_to" class="col-md-4  control-label"> الصفحة إلى
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input required="" id="page_to" type="number" name="page_to" value=""
+                                               class="form-control" placeholder="الصفحة إلى">
+                                        </input>
+                                        <div class="form-control-focus"></div>
+                                    </div>
+                                </div>
+
+                        </div>
                     </div>
+
 
                 </div>
             </div>
             <!-- END CONDENSED TABLE PORTLET-->
         </div>
-    </div>--}}
-    <div class="row">
+
         <div class="col-md-12">
             <div class="portlet box green">
                 <div class="portlet-title">
@@ -327,9 +375,10 @@
             ajax: {
                 url: "{{url('research/{research}')}}",
                 data: function (d) {
-                    d.date_from = $('#date_from').val();
-                    d.date_to = $('#date_to').val();
-                    d.offer = $('#offer').val();
+                    d.researchers = $('#researchers').val();
+                    d.page_from=$("#page_from").val();
+                    d.page_to=$("#page_to").val();
+
                 }
             },
             dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
@@ -348,11 +397,11 @@
                 },*/
             ],
             columns: [
-/*
-                {className: 'text-center', data: 'category.ctg_name', name: 'category.ctg_name', searchable: true},
-*/
+                /*
+                                {className: 'text-center', data: 'category.ctg_name', name: 'category.ctg_name', searchable: true},
+                */
                 {className: 'text-center', data: 'res_title', name: 'res_title', searchable: true},
-                {className: 'text-center', data: 'user', name: 'user', searchable: false},
+                {className: 'text-center', data: 'user', name: 'name', searchable: true},
                 {className: 'text-center', data: 'keywords', name: 'keywords', searchable: true},
                 {className: 'text-center', data: 'page_from', name: 'page_from', searchable: true},
                 {className: 'text-center', data: 'page_to', name: 'page_to', searchable: true},

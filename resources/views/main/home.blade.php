@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
             <div class="col-md-6">
                 <div>
@@ -173,35 +173,35 @@
                         <hr>
                         <strong class="block margin-top-10"><i class="fa fa-cube"></i> المشرف العام</strong>
                         <div style="margin-right:20px">
-                            <a class="edbb_59 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\User::where('role_id',2)->first()['id']}}">
-                           {{\App\User::where('role_id',2)->first()['degree']}} {{\App\User::where('role_id',2)->first()['name']}}
+                            <a class="edbb_59 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',2)->first()['id']}}">
+                           {{\App\Models\User::where('role_id',2)->first()['degree']}} {{\App\Models\User::where('role_id',2)->first()['name']}}
                             </a>
                         </div>
                         <strong class="block margin-top-10"><i class="fa fa-cube"></i> رئيس التحرير</strong>
                         <div style="margin-right:20px">
-                            <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\User::where('role_id',3)->first()['id']}}">
-                               {{\App\User::where('role_id',3)->first()['degree']}} {{\App\User::where('role_id',3)->first()['name']}}
+                            <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',3)->first()['id']}}">
+                               {{\App\Models\User::where('role_id',3)->first()['degree']}} {{\App\Models\User::where('role_id',3)->first()['name']}}
                                   </a>
                         </div>
 
                         <strong class="block margin-top-10"><i class="fa fa-cube"></i> هيئة التحرير</strong>
                         <div style="margin-right:20px">
-                            @foreach(\App\User::where('role_id',5)->get() as $value)
+                            @foreach(\App\Models\User::where('role_id',5)->get() as $value)
                                 <a class="edbb_5 block pub_owner tag_a"
-                                   href="{{url('browse_users').'/'.\App\User::where('role_id',5)->first()['id']}}">{{$value->degree}}{{$value->name}}</a>
+                                   href="{{url('browse_users').'/'.\App\Models\User::where('role_id',5)->first()['id']}}">{{$value->degree}}{{$value->name}}</a>
                             @endforeach
                         </div>
 					 <strong class="block margin-top-10"><i class="fa fa-cube"></i>  سكرتير المجلة</strong>
                         <div style="margin-right:20px">
-                            <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\User::where('role_id',6)->first()['id']}}">
-                               {{\App\User::where('role_id',6)->first()['degree']}} {{\App\User::where('role_id',6)->first()['name']}}
+                            <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',6)->first()['id']}}">
+                               {{\App\Models\User::where('role_id',6)->first()['degree']}} {{\App\Models\User::where('role_id',6)->first()['name']}}
                                   </a>
                         </div>
 
 						<strong class="block margin-top-10"><i class="fa fa-cube"></i>  مدقق لغوي</strong>
                         <div style="margin-right:20px">
-                            <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\User::where('role_id',7)->first()['id']}}">
-                               {{\App\User::where('role_id',7)->first()['degree']}} {{\App\User::where('role_id',7)->first()['name']}}
+                            <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',7)->first()['id']}}">
+                               {{\App\Models\User::where('role_id',7)->first()['degree']}} {{\App\Models\User::where('role_id',7)->first()['name']}}
                                   </a>
                         </div>
 

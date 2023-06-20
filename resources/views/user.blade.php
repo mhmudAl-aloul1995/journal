@@ -47,19 +47,13 @@
 
                                                 </label>
                                                 <div class="col-md-8">
-                                                    <select required style="width:100%"
+                                                    <select multiple required style="width:100%"
                                                             data-placeholder="الدور"
-                                                            id="role_id" name="role_id"
+                                                            id="roles" name="roles[]"
                                                             class="form-control select2  ">
-                                                        <option value=""></option>
-
-                                                        <option value="1"> باحث</option>
-                                                        <option value="2">المشرف العام</option>
-                                                        <option value="3"> رئيس التحرير</option>
-                                                        <option value="5"> هيئة التحرير</option>
-                                                        <option value="6">سكرتير المجلة</option>
-                                                        <option value="7">مدقق لغوي</option>
-
+                                                        @foreach($roles as $value)
+                                                            <option value="{{$value->id}}">{{$value->name}}</option>
+                                                        @endforeach
 
                                                     </select>
                                                 </div>
@@ -102,14 +96,14 @@
                                             <label for="mobile" class="col-md-4  control-label">بادئة الإسم
                                             </label>
                                             <div class="col-md-8">
-                                                <input required="" type="text" name="degree" value=""
+                                                <input required="" type="text" name="title" value=""
                                                        class="form-control" placeholder="بادئة الإسم">
                                                 <div class="form-control-focus"></div>
                                             </div>
                                         </div>
                                     </div>
 
-									         <div class="col-md-6">
+                                    <div class="col-md-6">
                                         <div class="form-group form-md-line-input">
                                             <label for="mobile" class="col-md-4  control-label">رقم الجوال
                                             </label>
@@ -165,6 +159,79 @@
 
     <div class="row">
         <div class="col-md-12">
+            <!-- BEGIN CONDENSED TABLE PORTLET-->
+            <div class="portlet box green">
+                <div class="portlet-title">
+
+                    <div class="caption">
+                        <i class="fa fa-search"></i>فلاتر البحث
+                    </div>
+                    <div class="actions">
+                        <a style="color: white;" id="public_search" href="javascript:;" class="btn btn-default btn-sm">
+                            <i style="color: white;" class="fa fa-search"></i> بحث </a>
+                    </div>
+
+                </div>
+                <div class="portlet-body collapse1">
+                    <div style=" " class="row">
+                        <div class="col-md-4">
+                            <div class="form-group form-md-line-input">
+                                <label for="researchers" class="col-md-4  control-label">المستخدمين
+
+                                </label>
+                                <div class="col-md-8">
+                                    <select id="researchers" multiple required
+                                            data-placeholder="المؤلفون"
+                                            name="researchers[]"
+                                            class="form-control select2  ">
+
+                                        @foreach ($user as $value)
+                                            <option value="{{ $value->id }}">{{ $value->name.'-'.$value->id }}</option>
+
+                                        @endforeach
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group form-md-line-input">
+                                <label for="researchers" class="col-md-4  control-label">الأدوار
+
+                                </label>
+                                <div class="col-md-8">
+
+                                    <select multiple required style="width:100%"
+                                            data-placeholder="الدور"
+                                            id="roles" name="roles[]"
+                                            class="form-control select2  ">
+                                        <option value=""></option>
+
+                                        <option value="1"> باحث</option>
+                                        <option value="2">المشرف العام</option>
+                                        <option value="3"> رئيس التحرير</option>
+                                        <option value="5"> هيئة التحرير</option>
+                                        <option value="6">سكرتير المجلة</option>
+                                        <option value="7">مدقق لغوي</option>
+                                        <option value="8"> محكم</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- END CONDENSED TABLE PORTLET-->
+        </div>
+
+
+        <div class="col-md-12">
             <div class="portlet box green">
                 <div class="portlet-title">
                     <div class="caption">
@@ -193,13 +260,14 @@
                         <table class="table table-striped  table-hover" id="userTable">
                             <thead>
                             <tr>
+                                <th> إجراء</th>
+
                                 <th>#</th>
                                 <th> إسم المستخدم</th>
                                 <th> الدور</th>
                                 <th>الإيميل</th>
                                 <th>الجوال</th>
                                 <th>العنوان</th>
-                                <th> إجراء</th>
 
                             </tr>
                             </thead>
@@ -225,7 +293,7 @@
         var user = $('#userTable').DataTable({
             processing: true,
             serverSide: true,
-			order: [[1, 'asc']],
+            order: [[1, 'asc']],
 
             ajax: {
                 url: "{{url('user/{user}')}}",
@@ -252,13 +320,13 @@
                 },*/
             ],
             columns: [
+                {className: 'text-left', data: 'action', name: 'action', searchable: false},
                 {className: 'text-center', data: 'id', name: '', searchable: true},
                 {className: 'text-center', data: 'name', name: 'name', searchable: true},
-                {className: 'text-center', data: 'role_id', name: 'role_id', searchable: true},
+                {className: 'text-center', data: 'roles', name: 'roles', searchable: true},
                 {className: 'text-center', data: 'email', name: 'email', searchable: true},
                 {className: 'text-center', data: 'mobile', name: 'mobile', searchable: true},
                 {className: 'text-center', data: 'address', name: 'address', searchable: true},
-                {className: 'text-left', data: 'action', name: 'action', searchable: false},
             ],
         });
 

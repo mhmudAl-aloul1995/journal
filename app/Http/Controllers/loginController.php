@@ -49,13 +49,13 @@ class loginController extends Controller {
     public function login(Request $request) {
 
 
-        $credentials = $request->only('name', 'password');
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
 
             return response(['success' => true]);
         }
-        return response(['success' => false,'message'=>"خطأ في إسم المستخدم وكلمة المرور"]);
+        return response(['success' => false,'message'=>"خطأ في البريد الإلكتروني أو كلمة المرور"]);
 
     }
 

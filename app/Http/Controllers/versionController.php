@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Bill;
-use App\Folder;
-use App\version;
-
+use App\Models\Folder;
+use App\Models\version;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Project;
 use Yajra\Datatables\Datatables;
@@ -17,7 +16,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class versionController extends Controller
 {
-
+    function __construct()
+    {
+        $this->middleware('permission:version-list|version-create|version-edit|version-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:version-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:version-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:version-delete', ['only' => ['destroy']]);
+    }
 
     public function index()
     {

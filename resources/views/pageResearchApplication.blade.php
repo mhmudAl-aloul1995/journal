@@ -124,7 +124,7 @@
             <div class="portlet box green">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-globe"></i>التصنيفات
+                        <i class="fa fa-globe"></i>الأبحاث
                     </div>
                     <div class="tools">
 
@@ -149,8 +149,8 @@
                         <table class="table table-striped  table-hover" id="categoryTable">
                             <thead>
                             <tr>
-                                <th> إسم التصنيف</th>
-
+                                <th> هنوان البحث</th>
+                                <th> الحالة</th>
                                 <th> إجراء</th>
 
                             </tr>

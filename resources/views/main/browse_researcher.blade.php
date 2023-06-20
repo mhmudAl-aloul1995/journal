@@ -42,7 +42,7 @@
 
                                 <ul class="list-inline categories nomargin">
                                     <?php
-                                    $users=\App\User::withCount('researchers')->where('name', 'LIKE', $value.'%')->orderBy('name','asc')->get();
+                                    $users=\App\Models\User::withCount('researchers')->where('name', 'LIKE', $value.'%')->orderBy('name','asc')->get();
                                     //dd($users);
                                     ?>
                                     @foreach($users as $user)

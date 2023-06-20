@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\main;
 
-use App\Category;
-use App\Folder;
+use App\Models\Category;
+use App\Models\Folder;
 use App\Http\Controllers\Controller;
-use App\Research;
-use App\User;
-use App\Version;
+use App\Models\Research;
+use App\Models\User;
+use App\Models\Version;
 use View;
 use Yajra\Datatables\Enginges\EloquentEngine;
 use Illuminate\Http\Request;
@@ -15,6 +15,8 @@ use Mail;
 use App\Mail\JournalMail;
 use Illuminate\Support\Facades\Hash;
 use Auth;
+use Validator;
+
 class signupController extends Controller
 {
 
@@ -34,26 +36,39 @@ class signupController extends Controller
         dd(Mail::to('mhmudaloul@gmail.com')->send(new JournalMail ($name,$password)));*/
         $data = $request->all();
 
-
-        $request->validate([
+        $messages = array(
+            'cn_title.required' => 'يجب عليك إدخال اللقب',
+            'name.required' => 'يجب على إدخال الإسم كاملا',
+            'contact_type.required' => 'يجب عليك إدخال المستوى التعليمي',
+            'sp_code.required' => 'يجب عليك إدخال التخصص الدراسي',
+            'speciality.required' => 'يجب عليك إدخال التخصص الدقيق',
+            'phone.required' => 'يجب عليك إدخال رقم الجوال',
+            'zip_code.required' => 'يجب عليك إدخال الرمز البريدي',
+            'email.required' => 'يجب عليك إدخال الإيميل',
+            'email.unique' => 'هذه الإيميل مدخل مسبقاً',
+            'city.required' => 'يجب عليك إدخال المدينة',
+            'email.email' => 'يجب أن يكون حقل البريد الإلكتروني صالحًا.',
+        );
+        $validator = Validator::make($request->all(), ([
             'cn_title' => 'required',
             'name' => 'required',
             'contact_type' => 'required',
-            'sb_code' => 'required',
+            'sp_code' => 'required',
             'speciality' => 'required',
-            'mobile' => 'required',
-            'fax' => 'required',
+            'phone' => 'required',
             'zip_code' => 'required',
             'email' => 'required|email|unique:users',
             'city' => 'required',
-        ]);
-
+        ]), $messages);
+        if ($validator->fails()) {
+            return response(['success' => false, 'errors' => $validator->messages()]);
+        }
         $data['role_id'] = 1;
         $data['password'] = Hash::make($data['name']);
-        $data['email'] = $data['email_1'];
-        unset($data['email_1']);
+
 
         $user = User::create($data);
+        $user->assignRole([1]);
 
         if (!$user) {
             return response(['success' => false]);
@@ -61,10 +76,9 @@ class signupController extends Controller
         }
 
 
+        if (Auth::attempt(['email' => $data['email'], 'password' => $data['name']])) {
 
-        if (Auth::attempt(['email'=>$data['email'],'password'=>$data['name']])) {
-
-            return response(['success' => true, 'url' => url('research')]);
+            return response(['success' => true, 'url' => url('profile')]);
         }
 
 

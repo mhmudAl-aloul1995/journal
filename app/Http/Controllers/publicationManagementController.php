@@ -24,34 +24,23 @@ use View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EvaluationsUser;
 
-class researchApplicationController extends Controller
+class publicationManagementController extends Controller
 {
 
 
- function __construct()
+    function __construct()
     {
-         $this->middleware('permission:researchApplication-list|researchApplication-create|researchApplication-edit|researchApplication-delete', ['only' => ['index','show']]);
-         $this->middleware('permission:researchApplication-create', ['only' => ['create','store']]);
-         $this->middleware('permission:researchApplication-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:researchApplication-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:publicationManagement-list|publicationManagement-create|publicationManagement-edit|publicationManagement-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:publicationManagement-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:publicationManagement-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:publicationManagement-delete', ['only' => ['destroy']]);
 
     }
+
 
     public function index()
     {
-
-
-        $researchApplication = ResearchApplication::all();
-        $user = User::where('id', '!=', 1)->get();
-
-        return View::make('researchApplication', compact('researchApplication', 'user'));
-
-    }
-
-
-    public function publicationManagementView()
-    {
-        $evaluations = User::where('role_id', '8')->get();
+        $evaluations = User::all();
         $user = User::where('id', '!=', 1)->get();
 
         $data['user'] = $user;
@@ -59,21 +48,62 @@ class researchApplicationController extends Controller
         return View::make('publicationManagement', $data);
     }
 
+    public function showAllApplication($id)
+    {
+
+
+        $data['id'] = $id;
+        $data['user'] = ResearchApplication::find($id)->user;
+        $data['evaluations'] = ResearchApplication::find($id)->researcher_evaluations;
+        $data['answer_evaluation_6'] = ['', 'صالح للنشر كما هو', 'صالح للنشر بعد إجراءات مرفقة', 'صالح للنشر بعد إجراءات تعديلات جوهرية مرفقة', ' غير صالح للنشر'];
+
+        return View::make('showAllApplication', $data);
+
+    }
 
     public function show(Request $request)
     {
         $data = $request->all();
-        $users = ResearchApplication::query()->with('user')->select('research_applications.*');
 
+        $users = ResearchApplication::query()->with(['user', 'evaluations_users.evaluators']);
+
+        if (isset($data['id']) && $data['id'] != null) {
+            $users->where('id', $data['id']);
+
+        }
         $status = ['', 'info', 'warning', 'danger', 'primary'];
         $status1 = ['', 'ارفاق الطلب', 'تحكيم البحث', 'تدقيق لغوي', 'الموافقة على النشر'];
         $changeStatus = [1 => 'الموافقة على الطلب', 2 => 'لحنة تحكيم', 3 => 'تدقيق لغوي', 4 => 'جاهز للنشر'];
-        if (Auth::id() != 1) {
-            $users->where('user_id', Auth::id());
-        }
+
 
         $users->orderBy('research_applications.id', 'desc');
-        return Datatables::of($users)
+        return Datatables::of($users->get())
+            ->addColumn('evaluators', function ($ctr) {
+
+                if ($ctr->evaluations_users->count() == 0) {
+                    return null;
+                }
+
+                $evaluators = '';
+                $color = ['#e91e63', '#4caf50', '#00bcd4', '#ff5722', '#9c27b0', '#cddc39', '#4caf50', '#009688', '#673ab7', '#4caf50',];
+
+                foreach ($ctr->evaluations_users as $key => $value) {
+
+                    $evaluators .= '<span  style=" font-size:70%;  margin:1px; color:white;background-color:' . $color[$key] . '" class=" btn  btn-group-red">' . $value->evaluators->name . '</span>';
+                }
+                return $evaluators;
+
+
+                return '<a target="_blank" href="' . $ctr->res_file . '">الرابط</a>';
+            })
+            ->addColumn('prf_file', function ($ctr) {
+                if ($ctr->proofreader_file == null) {
+                    return null;
+                }
+                return '<a target="_blank" href="' . $ctr->prf_file . '">الرابط</a>';
+
+
+            })
             ->addColumn('is_pay', function ($ctr) {
 
                 if ($ctr->is_pay == 1) {
@@ -88,41 +118,40 @@ class researchApplicationController extends Controller
 
             })
             ->addColumn('res_file', function ($ctr) {
+                if ($ctr->research_file == null) {
+                    return null;
+                }
                 return '<a target="_blank" href="' . $ctr->res_file . '">الرابط</a>';
             })
             ->addColumn('res_money', function ($ctr) {
+                if ($ctr->research_money_file == null) {
+                    return null;
+                }
                 return '<a target="_blank" href="' . $ctr->res_money . '">الرابط</a>';
 
             })
             ->addColumn('app_status', function ($ctr) use ($status, $status1) {
-
-                return ' <span ondblclick="showResearchApplicationStatusModal(' . $ctr->id . ',' . $ctr->app_status . ')" class="label label-sm label-' . $status[$ctr->app_status] . '">' . $status1[$ctr->app_status] . '</span>';
+                return ' <span ondblclick="showResearchApplicationStatusModal(' . $ctr->id . ',' . $ctr->app_status . ',' . $ctr->evaluations_users->pluck('evaluator_id') . ')" class="label label-sm label-' . $status[$ctr->app_status] . '">' . $status1[$ctr->app_status] . '</span>';
 
             })
             ->addColumn('action', function ($ctr) use ($changeStatus) {
-
+                $pay = $ctr->app_status == 1 ? '<li><a onclick="showResearchApplicationPayModal(' . $ctr->id . ',' . $ctr->is_pay . ')" href="javascript:;">
+                                                                    <i class="icon-puzzle"></i> حالة الدفع </a>
+                                                            </li>' : '';
                 return '<div class="btn-group">
                                                         <button  class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> إجراء
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                         <ul  class="dropdown-menu" role="menu">
-
+' . $pay . '
                                                             <li>
-                                                                <a onclick="showResearchApplicationPayModal(' . $ctr->id . ',' . $ctr->is_pay . ')" href="javascript:;">
-                                                                    <i class="icon-puzzle"></i> حالة الدفع </a>
-                                                            </li>
-                                                            <li>
-                                                                <a onclick="showModal(`researchApplication`,' . $ctr->id . ')" href="javascript:;">
-                                                                    <i class="icon-pencil"></i> تعديل </a>
-                                                            </li>
-                                                            <li>
-                                                                <a onclick="deleteThis(`researchApplication`,' . $ctr->id . ')"  href="javascript:;">
-                                                                    <i class="icon-trash"></i> حذف  </a>
+                                                                <a target="_blank"  href="' . url('') . '/showAllApplication/' . $ctr->id . '">
+                                                                    <i class="icon-eye"></i>  الطلب  </a>
                                                             </li>
                                                             </ul>
                                                     </div>';
             })
-            ->rawColumns(['action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
+            ->rawColumns(['prf_file' => 'prf_file', 'action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay', 'evaluators' => 'evaluators'])
             ->make(true);
     }
 
@@ -182,40 +211,40 @@ class researchApplicationController extends Controller
         ]);
     }
 
-    public function researchApplicationStatus(Request $request)
-    {
-        $data = $request->all();
+    /*    public function researchApplicationStatus(Request $request)
+        {
+            $data = $request->all();
 
 
-        //  $data['user_id'] = Auth::id();
-        if ($data['app_status'] == 2) {
+            //  $data['user_id'] = Auth::id();
+            if ($data['app_status'] == 2) {
 
 
-            $EvaluationsUser = null;
-            foreach ($data['user_id'] as $value) {
-                $user = User::find($value)->update(['password' => Hash::make('123456')]);
-                $EvaluationsUser = EvaluationsUser::updateOrCreate(['evaluator_id' => $value, 'researcha_application_id' => $data['research_id']]);
+                $EvaluationsUser = null;
+                foreach ($data['user_id'] as $value) {
+                    $user = User::find($value)->update(['password' => Hash::make('123456')]);
+                    $EvaluationsUser = EvaluationsUser::updateOrCreate(['evaluator_id' => $value, 'research_application_id' => $data['research_id']]);
 
-            }
+                }
 
 
-            if (!$EvaluationsUser) {
+                if (!$EvaluationsUser) {
+
+                    return response()->json([
+                        'success' => FALSE,
+                        'message' => "حدث حطأ أثناء الإدخال"
+                    ]);
+                }
 
                 return response()->json([
-                    'success' => FALSE,
-                    'message' => "حدث حطأ أثناء الإدخال"
+                    'success' => TRUE,
+                    'message' => "تم الإدخال بنجاح",
+                    'research' => $EvaluationsUser
+
+
                 ]);
             }
-
-            return response()->json([
-                'success' => TRUE,
-                'message' => "تم الإدخال بنجاح",
-                'research' => $EvaluationsUser
-
-
-            ]);
-        }
-    }
+        }*/
 
     public function store(Request $request)
     {
@@ -320,9 +349,8 @@ class researchApplicationController extends Controller
     public function destroy(Request $request, $id)
     {
 
-        $researchers = Researcher::where('research_id', $id)->delete();
 
-        $research = Research::find($id)->delete();
+        $research = ResearchApplication::find($id)->delete();
         if ($research) {
             return response()->json([
                 'message' => 'تمت العملية بنجاح',

@@ -24,9 +24,10 @@
 
                 </div>
 
-                <form class="nomargin sky-form validate" action="{{url('signup')}}" method="post" id="signup" name="frm_contact"
-                      enctype="multipart/form-data" non_ajax="1" novalidate="novalidate">
 
+                <form id="signup" role="form" data-toggle="validator" method="POST" action="{{url('signup')}}"
+                      data-toggle="validator" accept-charset="UTF-8"
+                      class="nomargin sky-form validate" role="form" enctype="multipart/form-data">
 
                     <!-- REGISTER -->
                     <div class="col-md-12 col-sm-7">
@@ -47,8 +48,7 @@
                                             <label>اللقب <span class="requird"></span></label>
 
                                             <div class="fancy-form fancy-form-select">
-                                                <select name="cn_title" class="form-control radius-0 select2"
-                                                        tabindex="-1" style="display: none;">
+                                                <select required name="cn_title" class="form-control  select2">
                                                     <option value="" disabled="" selected="">-- حدد --</option>
                                                     <option value="1"> الدكتور</option>
                                                     <option value="2">السيد</option>
@@ -97,7 +97,7 @@
                                             <label> البريد الإلكتروني <span class="requird">*</span></label>
                                             <label class="input margin-bottom-10">
                                                 <i class="ico-append fa fa-envelope"></i>
-                                                <input type="email" name="email_1" value=""
+                                                <input type="email" name="email" value=""
                                                        required="required">
                                             </label>
                                         </div>
@@ -115,7 +115,7 @@
 
                                             <div class="fancy-form fancy-form-select">
                                                 <select name="contact_type" class="form-control radius-0 select2"
-                                                        required="required" tabindex="-1" style="display: none;">
+                                                        required="required">
                                                     <option value="" disabled="" selected="">-- حدد --</option>
                                                     <option value="1"> دكتوراه</option>
                                                     <option value="7">طبیب</option>
@@ -136,7 +136,7 @@
 
                                             <div class="fancy-form fancy-form-select">
                                                 <select name="degree" class="form-control radius-0 select2"
-                                                        required="required" tabindex="-1" style="display: none;">
+                                                        required="required">
                                                     <option value="" disabled="" selected="">-- حدد --</option>
                                                     <option value="1">أستاذ</option>
                                                     <option value="2">أستاذ مشارك</option>
@@ -161,13 +161,13 @@
                                             <label> التخصص الدراسي <span class="requird"></span></label>
 
                                             <div class="fancy-form fancy-form-select">
-                                                <select name="sb_code" class="form-control select2 radius" tabindex="-1"
+                                                <select name="sp_code" class="form-control select2 radius" tabindex="-1"
                                                         style="display: none;">
                                                     <option value="" disabled="" selected="">-- حدد --</option>
-                                                    <option value="1656">إدارة الأعمال</option>
-                                                    <option value="1657">الأقتصاد</option>
-                                                    <option value="1658">العلوم السياسية</option>
-                                                    <option value="1655">المحاسبة</option>
+                                                    <option value="1">إدارة الأعمال</option>
+                                                    <option value="2">الأقتصاد</option>
+                                                    <option value="3">العلوم السياسية</option>
+                                                    <option value="4">المحاسبة</option>
                                                 </select>
 
                                                 <i class="fancy-arrow"></i>
@@ -177,7 +177,7 @@
 
                                         <div class="col-md-6 col-sm-6">
                                             <!-- Speciality -->
-                                            <label>مجال الدراسة <span class="requird"></span></label>
+                                            <label>التخصص الدقيق <span class="requird"></span></label>
                                             <label class="input margin-bottom-10">
                                                 <i class="ico-append fa fa-graduation-cap"></i>
                                                 <input type="text" name="speciality" value="">
@@ -194,8 +194,8 @@
                                             <!-- Mobile -->
                                             <label>رقم الهاتف الجوال <span class="requird"></span></label>
                                             <label class="input margin-bottom-10">
-                                                <i class="ico-append fa fa-mobile-phone"></i>
-                                                <input type="text" name="mobile" value="">
+                                                <i class="ico-append fa fa-phone-phone"></i>
+                                                <input type="text" name="phone" value="">
                                             </label>
                                             <!-- /Mobile -->
                                         </div>
@@ -249,10 +249,11 @@
                                                 <input type="hidden" name="g-recaptcha-response"
                                                        id="g-recaptcha-response" value="">
 
-                                                <a class="btn btn-block btn-social btn-primary margin-top-10 margin-right-0 margin-left-0">
+                                                <a id="submit"
+                                                   class="btn btn-block btn-social btn-primary margin-top-10 margin-right-0 margin-left-0">
                                                     <i class="fa fa-user-plus"></i>
                                                     <button id="submit_btn" style="display:block;width:100%"
-                                                            class="margin-0 weight-700" onclick="register()"
+                                                            class="margin-0 ok weight-700" onclick="register()"
                                                             type="button"> حفظ
                                                     </button>
                                                 </a>
@@ -286,46 +287,57 @@
         <script type="text/javascript">
 
 
-
-
-
-
             function register() {
+                $("#submit").css('background-color', '#f44336')
+                $("#signup").prop('disabled', true)
 
-                    var $form = $("#signup"),
-                        formData = new FormData(),
-                        params = $form.serializeArray();
-                    $.each(params, function (i, obj) {
-                        formData.append(obj.name, obj.value);
-                    });
-                formData.append('email',$('[name="email_1"]').val());
+                var $form = $("#signup"),
+                    formData = new FormData(),
+                    params = $form.serializeArray();
+                $.each(params, function (i, obj) {
+                    formData.append(obj.name, obj.value);
+                });
+                formData.append('email', $('[name="email"]').val());
 
                 formData.append('_token', '{{csrf_token()}}');
 
-                    $.ajax({
-                        url: $form.attr('action'),
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        type: 'POST',
-                        success: function (data) {
-                            if (data.success == true) {
+                $.ajax({
+                    url: $form.attr('action'),
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    success: function (data) {
+                        $("#submit").css('background-color', '#337ab7')
+                        $("#signup").prop('disabled', false)
+                        if (data.success == true) {
 
-                                window.location.href = data.url;
-                            }
+                            window.location.href = data.url;
+                        } else {
+                            console.log(data.errors);
 
-                        },
-                        error: function (data) {
-                            console.log(data);
-                            showAlertMessage('alert-danger', 'Fatal error !', 'An unknown error occured !');
-                        },
-                        statusCode: {
-                            500: function (data) {
-                                console.log(data);
-                            }
+                            var errors = "<ul  style='width: auto; text-align: right; margin-right: 500px;' >";
+                            $.each(data.errors, function (i, currProgram) {
+                                $.each(currProgram, function (key, val) {
+                                    errors += "<li>" + val + "</li>";
+                                });
+                            });
+                            errors += "</ul>"
+                            showAlertMessage('alert-danger', null, errors);
+
                         }
-                    });
+
+                    },
+                    error: function (data) {
+
+                    },
+                    statusCode: {
+                        500: function (data) {
+                            console.log(data);
+                        }
+                    }
+                });
 
             }
 

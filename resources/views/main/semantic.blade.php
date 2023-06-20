@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--[if IE 8]>
 <html class="ie ie8"> <![endif]-->
@@ -11,7 +10,8 @@
     <title>مجلة جامعة غزة للأبحاث والدراسات</title>
 
     <!-- favicon  -->
-    <link rel="shortcut icon" type="image/ico" href="https://portal.gu.edu.ps/public/themes/Falcon/v2.8.0/assets/img/favicons/favicon.ico"/>
+    <link rel="shortcut icon" type="image/ico"
+          href="https://portal.gu.edu.ps/public/themes/Falcon/v2.8.0/assets/img/favicons/favicon.ico"/>
 
     <!-- mobile settings -->
     <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0"/>
@@ -25,6 +25,8 @@
     <!-- WEB FONTS : use %7C instead of | (pipe) -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
           type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{{url('')}}/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet"
     <!-- CORE CSS -->
     <link href="{{url('')}}/assets/journal/bootstrap.min.css?v=0.02"
@@ -32,7 +34,10 @@
     <link href="{{url('')}}/assets/journal/header.css?v=0.05" rel="stylesheet"
           type="text/css"/>
     <link href="{{url('')}}/assets/journal/footer.css" rel="stylesheet" type="text/css"/>
-    <link href="{{url('')}}/assets/journal/essentials.css?v=0.2" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
+          integrity="sha512-IW0nhlW5MgNydsXJO40En2EoCkTTjZhI3yuODrZIc8cQ4h1XcF53PsqDHa09NqnkXuIe0Oiyyj171BqZFwISBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://jces.journals.ekb.eg/inc/css/essentials.css?v=0.2" rel="stylesheet" type="text/css"/>
     <link href="{{url('')}}/assets/journal/cookieconsent.min.css" rel="stylesheet" type="text/css"/>
     <link href="{{url('')}}/assets/journal/print.css" rel="stylesheet" type="text/css" media="print"/>
     <!-- RTL CSS -->
@@ -43,9 +48,6 @@
           rel="stylesheet" type="text/css" id="rtl_ltr_b1"/>
     <link href="{{url('')}}/assets/journal/accordian.css" rel="stylesheet"
           type="text/css"/>
-    <link href="{{url('')}}/assets/journal/academicons.min.css" rel="stylesheet"
-          type="text/css"/>
-
 
     <!-- user defined metatags-->
     <noscript><img src="https://certify.alexametrics.com/atrk.gif?account=8dxdn1aMp410/9" style="display:none"
@@ -53,13 +55,21 @@
     <link href="{{url('')}}/assets/journal/stl_front.css?v=0.25" rel="stylesheet"
           type="text/css"/>
     <link href="{{url('')}}/assets/journal/stl.css" rel="stylesheet" type="text/css"/>
+    <!-- Latest compiled and minified CSS -->
 
     <!-- Feed-->
     <link rel="alternate" type="application/rss+xml" title="RSS feed" href="ju.rss"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
     <script type="text/javascript"
             src="{{url('')}}/assets/journal/jquery.min.js?v=0.5"></script>
     <script type="text/javascript" src="{{url('')}}/assets/journal/common.js?v=0.1"></script>
     <script type="text/javascript" src="{{url('')}}/assets/journal/cookieconsent.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SocialIcons/1.0.1/soc.min.js"
+            integrity="sha512-eUJ3eP9+avp5kHKhfx5gB0vzLEgMkZiOmZcpVqJmlg9hMMse2SChMOTSDWl6oYGfmYW2N7oO/W6CqpgYBneqKw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
     <!-- Extra Style Scripts -->
@@ -76,7 +86,22 @@
         </div>
     </div>
 </div>
+<div id="alert-message" class="alert alert-fixed  alert-info" role="alert">
+    <div class="container">
+        <div class="row">
+            <button onclick="closeit()" type="button" class="close close-fixed">
+                <span class="fa fa-times"></span>
+            </button>
+            <p style=" text-align: center; " class="alert-message-body">
+                <strong></strong>
+                <span></span>
+            </p>
+        </div>
+    </div>
+</div>
+
 <style>
+
     @font-face {
         font-family: 'Droid Arabic Kufi';
         src: url('DroidArabicKufi.eot');
@@ -85,6 +110,76 @@
         url({{url('DroidArabicKufi.ttf')}}) format('truetype');
         font-weight: normal;
         font-style: normal;
+    }
+
+    .alert-warning {
+        background: none;
+        filter: none;
+        border: 0;
+        background-color: rgba(223, 170, 99, .9);
+    }
+
+    .alert-danger {
+        background: none;
+        filter: none;
+        border: 0;
+        background-color: rgba(219, 68, 55, .9);
+    }
+
+    .alert {
+        text-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        padding: 15px;
+        border-radius: 0px;
+        border: 0;
+        color: #fff;
+        margin-bottom: 0;
+        display: none;
+    }
+
+    .alert-fixed {
+        width: 100%;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        z-index: 2147483647;
+        position: fixed;
+        -webkit-transition: height 0.3s;
+        -moz-transition: height 0.3s;
+        -ms-transition: height 0.3s;
+        -o-transition: height 0.3s;
+        transition: height 0.3s;
+    }
+
+    .alert-fixed.smaller {
+        width: 100%;
+        overflow: hidden;
+        position: fixed;
+    }
+
+    .alert .close-fixed {
+        font-size: 14px;
+        line-height: 1;
+        color: #fff;
+        text-shadow: none;
+        opacity: 0.9;
+        filter: alpha(opacity=90);
+        padding-top: 2px;
+    }
+
+    .alert .close-fixed:hover {
+        color: #000;
+    }
+
+    .form-group > label {
+        color: #44b6ae;
+    }
+
+    .alert-message-body {
+        text-align: center;
+        /*margin-right:40%;*/
+        /*margin-left:40%;*/
     }
 
     body, .select2-selection__placeholder, .select2-selection__rendered, a, td {
@@ -137,9 +232,9 @@
                                     <li class="divider margin-bottom-6 margin-top-6"></li>
                                     <li><a href="{{url('browse_index_researcher')}}">فهرس الباحثين</a></li>
                                     <li class="divider margin-bottom-6 margin-top-6"></li>
-{{--
-                                    <li><a href="https://jces.journals.ekb.eg/keyword.index">فهرس الكلمات الرئيسية</a>
---}}
+                                    {{--
+                                                                        <li><a href="https://jces.journals.ekb.eg/keyword.index">فهرس الكلمات الرئيسية</a>
+                                    --}}
                                     </li>
                                 </ul>
                             </li>
@@ -155,29 +250,29 @@
                                     <li class="divider margin-bottom-6 margin-top-6"></li>
                                     <li><a href="{{url('browse_ethics')}}">أخلاقيات النشر</a>
                                     </li>
-       <li class="divider margin-bottom-6 margin-top-6"></li>
+                                    <li class="divider margin-bottom-6 margin-top-6"></li>
                                     <li><a href="{{url('browse_condition')}}">قواعد النشر والتوثيق</a>
                                     </li>
                                 </ul>
                             </li>
                             <li><a href="{{url('browse_authors_nots')}}"> دليل المؤلفين</a></li>
-               {{--             <li><a href="{{url('research')}}"> ارسال المقالة</a></li>
+                            {{--             <li><a href="{{url('research')}}"> ارسال المقالة</a></li>
 
-                            <li><a href="https://jces.journals.ekb.eg/journal/contact.us"> اتصل بنا</a></li>
---}}
+                                         <li><a href="https://jces.journals.ekb.eg/journal/contact.us"> اتصل بنا</a></li>
+             --}}
                         </ul>
-                        <ul class="nav navbar-nav navbar-right nomargin">
-{{-- 
+                        <ul class="nav navbar-nav nomargin">
+
                             @auth
-                                <li><a href="{{url('research')}}">{{Auth::user()->name}}</a></li>
+                                <li><a href="{{url('login')}}">{{Auth::user()->name}}</a></li>
                                 <li><a href="{{url('logout')}}"> تسجيل خروج</a></li>
                             @endauth()
                             @guest()
-                                <li><a href="{{url('research')}}">تسجيل الدخول</a></li>
+                                <li><a href="{{url('login')}}"> تسجيل الدخول</a></li>
                                 <li><a href="{{url('signup')}}"> التسجيل</a></li>
                             @endguest
---}}
                         </ul>
+
                     </div>
                     <!-- /.navbar-collapse -->
                 </div>
@@ -219,13 +314,13 @@
                     <li id="fli_Edb"><a href="{{url('browse_users/0')}}">هيئة التحرير</a>
                     </li>
                     <li id="fli_submit"><a href="{{url('research')}}"> ارسال المقالة</a></li>
-                   {{-- <li id="fli_contactus"><a href="https://jces.journals.ekb.eg/journal/contact.us">اتصل بنا</a></li>
-                    <li id="fli_glossary"><a href="https://jces.journals.ekb.eg/journal/glossary">قاموس المصطلحات
-                            التخصصية</a></li>
-                    <li id="fli_order_hrdj"><a href="https://jces.journals.ekb.eg/journal/subscription.form">الاشتراك
-                            للحصول على نسخة من الدورية</a></li>
-                    <li id="fli_sitemap"><a href="https://jces.journals.ekb.eg/sitemap.xml?usr"> خريطة الموقع</a></li>
-                --}}</ul>
+                    {{-- <li id="fli_contactus"><a href="https://jces.journals.ekb.eg/journal/contact.us">اتصل بنا</a></li>
+                     <li id="fli_glossary"><a href="https://jces.journals.ekb.eg/journal/glossary">قاموس المصطلحات
+                             التخصصية</a></li>
+                     <li id="fli_order_hrdj"><a href="https://jces.journals.ekb.eg/journal/subscription.form">الاشتراك
+                             للحصول على نسخة من الدورية</a></li>
+                     <li id="fli_sitemap"><a href="https://jces.journals.ekb.eg/sitemap.xml?usr"> خريطة الموقع</a></li>
+                 --}}</ul>
                 <!-- /Links -->
 
             </div>
@@ -242,7 +337,7 @@
 
             <div class="col-md-4">
 
-                <!-- Newsletter Form 
+                <!-- Newsletter Form
                 <h4 class="">الاشتراك في النشرة الإخبارية</h4>
                 <p>اشترك في النشرة الإخبارية لدينا للحصول على الأخبار والتحديثات الهامة</p>
 
@@ -322,11 +417,34 @@
 
 <script type="text/javascript"
         src="https://jces.journals.ekb.eg/themes/base/front/assets/js/scripts.js?v=0.02"></script>
+<script src="{{url('')}}/assets/bootstrapValidator.js"></script>
 
 
 <!-- user defined scripts-->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-72322659-1"></script>
 <script>
+    function showAlertMessage(messageType, strongText, messageBody, callback, timeOut) {
+        timeOut = typeof timeOut !== 'undefined' ? timeOut : 3000;
+        if ($.hasData('#alert-message', 'timeout')) {
+            clearTimeout($('#alert-message').data('timeout'));
+        }
+        $('.alert-message-body strong').html(strongText);
+        $('.alert-message-body span').html(messageBody);
+        $('#alert-message')
+            .hide()
+            .removeClass('alert-success alert-info alert-warning alert-danger')
+            .addClass(messageType)
+            .fadeIn();
+        var timeout = setTimeout(function () {
+            $('#alert-message').fadeOut('slow', function () {
+                if (callback !== undefined) {
+                    callback();
+                }
+            });
+        }, timeOut);
+        $('#alert-message').data('timeout', timeout);
+    }
+
     window.dataLayer = window.dataLayer || [];
 
     function gtag() {

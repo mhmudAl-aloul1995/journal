@@ -198,6 +198,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="Preview page of Metronic Admin RTL Theme #2 for blank page layout" name="description"/>
     <meta content="" name="author"/>
+    <input id="url" type="hidden" value="{{url('')}}"/>
+
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
           type="text/css"/>
@@ -264,7 +266,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <div class="page-header-inner ">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="{{url('profile')}}">
+            <a href="{{url('/')}}">
                 <img style=" width: 120px; margin-top:10%; " src="{{url('')}}/assets/gu.png" alt="logo" width="150"
                      height="40" class="logo-default"/>
             </a>
@@ -1574,7 +1576,6 @@ License: You must have a valid license purchased only from themeforest(the above
                         var selects = $('#' + formName + 'Form').find('select').serializeArray();
                         var inputs = $('#' + formName + 'Form').find('input,textarea').serializeArray();
                         var inputs = $('#' + formName + 'Form').find('input,textarea').serializeArray();
-
 
 
                         $.each(selects, function (i, field) {

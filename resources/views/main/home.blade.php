@@ -30,7 +30,7 @@
                 </div>
 --}}
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default ">
-                    <div style=" background-color:  #4295c9;" class="panel-heading">
+                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
                         <h3 class="panel-title">أرشيف الدورية</h3>
                     </div>
                     <div class="panel-body padding-3">
@@ -77,7 +77,7 @@
                     </p></div>
                 <!-- Top Articles -->
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default  panel-shadow">
-                    <div style=" background-color:  #4295c9;" class="panel-heading">
+                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
                         <b class="panel-title"><i class="fa fa-file"></i> أكثر المقالات مشاهدة</b>
                     </div>
                     <div class="panel-body">
@@ -106,7 +106,7 @@
                     <div>
 
                         <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default panel-shadow">
-                            <div style=" background-color:  #4295c9;" class="panel-heading">
+                            <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
                                 <b class="panel-title"><i class="fa fa-file"></i> الموضوعات الرئيسية</b>
                             </div>
                             <div class="panel-body">
@@ -162,7 +162,7 @@
             <!-- RIGHT -->
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default ">
-                    <div style=" background-color:  #4295c9;" class="panel-heading">
+                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
                         <h3 class="panel-title">معلومات عن المنشور</h3>
                     </div>
                     <div class="panel-body" style="padding: 15px;">
@@ -174,13 +174,13 @@
                         <strong class="block margin-top-10"><i class="fa fa-cube"></i> المشرف العام</strong>
                         <div style="margin-right:20px">
                             <a class="edbb_59 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',2)->first()['id']}}">
-                           {{\App\Models\User::where('role_id',2)->first()['degree']}} {{\App\Models\User::where('role_id',2)->first()['name']}}
+                           {{\App\Models\User::where('role_id',2)->first()['title']}} {{\App\Models\User::where('role_id',2)->first()['name']}}
                             </a>
                         </div>
                         <strong class="block margin-top-10"><i class="fa fa-cube"></i> رئيس التحرير</strong>
                         <div style="margin-right:20px">
                             <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',3)->first()['id']}}">
-                               {{\App\Models\User::where('role_id',3)->first()['degree']}} {{\App\Models\User::where('role_id',3)->first()['name']}}
+                               {{\App\Models\User::where('role_id',3)->first()['title']}} {{\App\Models\User::where('role_id',3)->first()['name']}}
                                   </a>
                         </div>
 
@@ -188,20 +188,20 @@
                         <div style="margin-right:20px">
                             @foreach(\App\Models\User::where('role_id',5)->get() as $value)
                                 <a class="edbb_5 block pub_owner tag_a"
-                                   href="{{url('browse_users').'/'.\App\Models\User::where('role_id',5)->first()['id']}}">{{$value->degree}}{{$value->name}}</a>
+                                   href="{{url('browse_users').'/'.\App\Models\User::where('role_id',5)->first()['id']}}">{{$value->title}}{{$value->name}}</a>
                             @endforeach
                         </div>
 					 <strong class="block margin-top-10"><i class="fa fa-cube"></i>  سكرتير المجلة</strong>
                         <div style="margin-right:20px">
                             <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',6)->first()['id']}}">
-                               {{\App\Models\User::where('role_id',6)->first()['degree']}} {{\App\Models\User::where('role_id',6)->first()['name']}}
+                               {{\App\Models\User::where('role_id',6)->first()['title']}} {{\App\Models\User::where('role_id',6)->first()['name']}}
                                   </a>
                         </div>
 
 						<strong class="block margin-top-10"><i class="fa fa-cube"></i>  مدقق لغوي</strong>
                         <div style="margin-right:20px">
                             <a class="edbb_2 block pub_owner tag_a" href="{{url('browse_users').'/'.\App\Models\User::where('role_id',7)->first()['id']}}">
-                               {{\App\Models\User::where('role_id',7)->first()['degree']}} {{\App\Models\User::where('role_id',7)->first()['name']}}
+                               {{\App\Models\User::where('role_id',7)->first()['title']}} {{\App\Models\User::where('role_id',7)->first()['name']}}
                                   </a>
                         </div>
 
@@ -218,7 +218,7 @@
                     --}}</div>
                 </div>
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default ">
-                    <div style=" background-color:  #4295c9;" class="panel-heading">
+                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
                         <h3 class="panel-title"> البحث</h3>
                     </div>
                     <div class="panel-body" style="padding: 15px;">

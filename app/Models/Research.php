@@ -88,6 +88,7 @@ class Research extends Model
      */
     public function researchers()
     {
+
         return $this->hasMany('App\Models\Researcher');
     }
 }

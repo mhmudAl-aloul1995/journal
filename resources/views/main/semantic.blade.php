@@ -8,8 +8,10 @@
 <head>
     <meta charset="utf-8"/>
     <title>مجلة جامعة غزة للأبحاث والدراسات</title>
-
-    <!-- favicon  -->
+    <input id="url" type="hidden" value="{{url('')}}"/>
+{{--background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);
+}--}}
+<!-- favicon  -->
     <link rel="shortcut icon" type="image/ico"
           href="https://portal.gu.edu.ps/public/themes/Falcon/v2.8.0/assets/img/favicons/favicon.ico"/>
 
@@ -194,15 +196,17 @@
 
     .dropdown-menu > li > a {
         color: #4295c9;
-        background-color: #4295c9;
+        background-image: linear-gradient(45deg, rgba(72, 133, 244, 0.75) 0%, rgba(44, 235, 199, 0.75) 100%);
     }
 </style>
 <div class="container">
     <div class="row">
 
         <div class="col-xs-12 col-lg-12  col-md-12 text-center">
-            <nav style=" background-color: #4295c9; " class="navbar navbar-default noborder nomargin noradius"
-                 role="navigation">
+            <nav
+                style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%); "
+                class="navbar navbar-default noborder nomargin noradius"
+                role="navigation">
                 <div class="container-fluid nopadding">
                     <div class="navbar-header" style="background: #FFFFFF;">
                         <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -265,7 +269,9 @@
 
                             @auth
                                 <li><a href="{{url('login')}}">{{Auth::user()->name}}</a></li>
+                                <li><a href="{{url('profile')}}"> الملف الشخصي</a></li>
                                 <li><a href="{{url('logout')}}"> تسجيل خروج</a></li>
+
                             @endauth()
                             @guest()
                                 <li><a href="{{url('login')}}"> تسجيل الدخول</a></li>

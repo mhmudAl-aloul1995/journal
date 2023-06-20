@@ -30,7 +30,7 @@
                                     <h4 class="role_name" id="edb19053">
                                         {{$role_id[$users->role_id]}} </h4>
                                     <h4><span title="{{$users->name}}"> <i class="glyphicon glyphicon-user"></i>
-                        {{$users->degree}} {{$users->name}}</span></h4>
+                        {{$users->title}} {{$users->name}}</span></h4>
 
                                     <cite class="block margin-bottom-10" title=""> </cite>
 

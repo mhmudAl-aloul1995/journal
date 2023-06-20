@@ -270,7 +270,7 @@ var FormWizard = function () {
                         fd.append('research_money_file', research_money_file)
                         fd.append('_token', token)
                         $.ajax({
-                            url: 'http://10.10.14.189/journal_dev/researchApplication',
+                            url: $("#url").val() + '/researchApplication',
                             type: 'post',
                             data: fd,
                             contentType: false,
@@ -330,7 +330,7 @@ var FormWizard = function () {
 
 
                         $.ajax({
-                            url: 'http://localhost/journal_dev/researchApplication',
+                            url: $('#url').val() + '/researchApplication',
                             type: 'post',
                             data: fd,
                             contentType: false,
@@ -387,7 +387,7 @@ var FormWizard = function () {
 
                         fd.append('_token', token)
                         $.ajax({
-                            url: 'http://localhost/journal_dev/researchApplication/' + research_application_id,
+                            url: $('#url').val() + '/researchApplication/' + research_application_id,
                             type: 'POST',
                             data: fd,
                             contentType: false,
@@ -444,7 +444,7 @@ var FormWizard = function () {
 
                         fd.append('_token', token)
                         $.ajax({
-                            url: 'http://localhost/journal_dev/researchApplication/' + research_application_id,
+                            url: $("#url").val() + '/researchApplication/' + research_application_id,
                             type: 'POST',
                             data: fd,
                             contentType: false,

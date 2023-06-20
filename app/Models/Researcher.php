@@ -21,6 +21,7 @@ class Researcher extends Model
      *
      * @var string
      */
+    protected $table = 'researchers';
     protected $keyType = 'integer';
 
     /**

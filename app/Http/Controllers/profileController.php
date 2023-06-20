@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\journal;
+use App\category;
 
-use App\JournalMembers;
-use App\user;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Project;
 use Yajra\Datatables\Datatables;
@@ -16,29 +13,41 @@ use View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
-class journalController extends Controller
+class categoryController extends Controller
 {
 
 
     public function index()
     {
 
-        $categories = Category::all();
-        $users = user::where('id', '!=', '1')->get();
-        return View::make('journal', compact('categories', 'users'));
 
+        return View::make('category');
 
     }
 
 
-    public function datatableJournal(Request $request)
+    public function show(Request $request)
     {
         $data = $request->all();
 
 
-        $users = Journal::query()->with('editorial_board_vice','editorial_board');
+        $users = Category::query();
 
         return Datatables::of($users)
+/*            ->addColumn('total', function ($ctr) use ($date_from, $date_to) {
+                $total = 0;
+                if (isset($date_from) && $date_from != null) {
+
+                    $total = $ctr->bills->whereBetween('bill_date', [$date_from, $date_to])->sum('bill_value');
+
+                } else {
+                    $total = $ctr->bills->sum('bill_value');
+
+                }
+                return $total;
+
+
+            })*/
             ->addColumn('action', function ($ctr) {
 
                 return '<div class="btn-group">
@@ -47,27 +56,27 @@ class journalController extends Controller
                                                         </button>
                                                         <ul  class="dropdown-menu" role="menu">
                                                             <li>
-                                                                <a onclick="showModal(`journal`,' . $ctr->id . ')" href="javascript:;">
+                                                                <a onclick="showModal(`category`,' . $ctr->id . ')" href="javascript:;">
                                                                     <i class="icon-pencil"></i> تعديل </a>
                                                             </li>
                                                             <li>
-                                                                <a onclick="deleteThis(`journal`,' . $ctr->id . ')"  href="javascript:;">
+                                                                <a onclick="deleteThis(`category`,' . $ctr->id . ')"  href="javascript:;">
                                                                     <i class="icon-trash"></i> حذف  </a>
                                                             </li>
                                                             </ul>
                                                     </div>';
             })
-            ->rawColumns(['action' => 'action', 'journal_img' => 'journal_img'])
+            ->rawColumns(['action' => 'action', 'category_img' => 'category_img'])
             ->make(true);
     }
 
-    public function show(Request $request, $id)
+    public function edit(Request $request, $id)
     {
 
-        $journal = Journal::find($id);
-        if ($journal) {
+        $category = Category::find($id);
+        if ($category) {
             return response()->json([
-                'journal' => $journal
+                'category' => $category
             ]);
         }
         return response(['message' => 'فشلت العملية'], 500);
@@ -77,27 +86,11 @@ class journalController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         unset($data['id']);
         $data['user_id'] = Auth::id();
-        $journal = Journal::create($data);
-        if ($data['members']) {
+        $category = Category::create($data);
 
-            foreach ($data['members'] as $value) {
-                if ($value != null) {
-                    JournalMembers::create(['journal_id' => $journal->id, 'user_id' => $value, 'type' => 0]);
-                }
-            }
-        }
-        if ($data['consaltants']) {
-
-            foreach ($data['consaltants'] as $value) {
-                if ($value != null) {
-                    JournalMembers::create(['journal_id' => $journal->id, 'user_id' => $value, 'type' => 1]);
-                }
-            }
-        }
-        if (!$journal) {
+        if (!$category) {
 
             return response()->json([
                 'success' => FALSE,
@@ -112,14 +105,14 @@ class journalController extends Controller
         ]);
     }
 
-    public function update_journal(Request $request)
+    public function update(Request $request)
     {
         $data = $request->all();
-        $journal = Journal::find($data['id']);
-        $journal->update($data);
+        $category = Category::find($data['id']);
+        $category->update($data);
 
 
-        if (!$journal) {
+        if (!$category) {
             return response()->json([
                 'success' => TRUE,
                 'message' => "حدث حطأ أثناء التعديل"
@@ -136,7 +129,7 @@ class journalController extends Controller
     {
 
 
-        if (Journal::find($id)->delete()) {
+        if (Category::find($id)->delete()) {
             return response()->json([
                 'success' => TRUE,
                 'message' => "تم الحذف بنجاح"

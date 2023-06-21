@@ -30,7 +30,7 @@
                 </div>
 --}}
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default ">
-                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
+                    <div  class="panel-heading">
                         <h3 class="panel-title">أرشيف الدورية</h3>
                     </div>
                     <div class="panel-body padding-3">
@@ -77,7 +77,7 @@
                     </p></div>
                 <!-- Top Articles -->
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default  panel-shadow">
-                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
+                    <div  class="panel-heading">
                         <b class="panel-title"><i class="fa fa-file"></i> أكثر المقالات مشاهدة</b>
                     </div>
                     <div class="panel-body">
@@ -106,7 +106,7 @@
                     <div>
 
                         <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default panel-shadow">
-                            <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
+                            <div  class="panel-heading">
                                 <b class="panel-title"><i class="fa fa-file"></i> الموضوعات الرئيسية</b>
                             </div>
                             <div class="panel-body">
@@ -162,7 +162,7 @@
             <!-- RIGHT -->
             <div class="col-lg-3 col-md-3 col-sm-12">
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default ">
-                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
+                    <div  class="panel-heading">
                         <h3 class="panel-title">معلومات عن المنشور</h3>
                     </div>
                     <div class="panel-body" style="padding: 15px;">
@@ -218,7 +218,7 @@
                     --}}</div>
                 </div>
                 <div style=" border-color:  #4295c9;" class="panel panel-default my_panel-default ">
-                    <div style=" background-image: linear-gradient(45deg, rgba(72,133,244,0.75) 0%, rgba(44,235,199,0.75) 100%);" class="panel-heading">
+                    <div  class="panel-heading">
                         <h3 class="panel-title"> البحث</h3>
                     </div>
                     <div class="panel-body" style="padding: 15px;">

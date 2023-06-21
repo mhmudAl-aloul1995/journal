@@ -194,15 +194,12 @@
         font-size: 140% !important;
     }
 
-    .dropdown-menu > li > a {
+    .dropdown-menu > li > a ,.panel-heading {
         color: #4295c9;
-        background-image: linear-gradient(45deg, rgba(72, 133, 244, 0.75) 0%, rgba(44, 235, 199, 0.75) 100%);
-    }
-
-    .panel-heading {
         background-image: linear-gradient(45deg, rgba(72, 133, 244, 0.75) 0%, rgba(44, 235, 199, 0.75) 100%) !important;
-
     }
+
+
 </style>
 <div class="container">
     <div class="row">

@@ -120,7 +120,7 @@
                                 <div class="row">
                                     <div class="col-xs-6 col-md-6 nomargin-bottom">
                                         <a href="javascript:loadModal('مجلة جامعة غزة للأبحاث والدراسات', './data/jces/coversheet/cover_ar.jpg')">
-                                            <img src="{{url('public/logo.jpeg')}}"
+                                            <img src="{{url('logo.jpeg')}}"
                                                  alt="مجلة جامعة غزة للأبحاث والدراسات" style="width: 100%;">
                                         </a>
                                     </div>

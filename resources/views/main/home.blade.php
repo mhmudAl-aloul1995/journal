@@ -9,8 +9,8 @@
             <div class="col-md-3 ">
                 <!-- Cover -->
                 <div class="item-box nomargin-top">
-                    <a href="javascript:loadModal('مجلة جامعة غزة للأبحاث والدراسات', '{{url('public/logo.jpeg')}}')">
-                        <img src="{{url('public/logo.jpeg')}}"
+                    <a href="javascript:loadModal('مجلة جامعة غزة للأبحاث والدراسات', '{{url('logo.jpeg')}}')">
+                        <img src="{{url('logo.jpeg')}}"
                              alt="مجلة جامعة غزة للأبحاث والدراسات"
                              style="width: 100%;">
                     </a>

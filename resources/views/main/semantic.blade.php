@@ -83,7 +83,7 @@
 <div class="container" id="header">
     <div class="row">
         <div class="col-xs-12 text-center">
-            <img src="{{url('public/mainCover.jpeg')}}" class="img-responsive text-center"
+            <img src="{{url('mainCover.jpeg')}}" class="img-responsive text-center"
                  style="display:-webkit-inline-box; width: 100%;">
         </div>
     </div>

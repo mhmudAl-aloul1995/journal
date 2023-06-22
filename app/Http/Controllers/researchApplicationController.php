@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AllocationDonor;
+use App\Mail\SendPassword;
 use App\Models\ResearchApplication;
 use App\Models\ResearchApplicationNote;
 use App\research;
@@ -25,7 +26,8 @@ use View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EvaluationsUser;
 use App\Models\ResearcherEvaluation;
-use App\Mail;
+use Mail;
+use App\Mail\NotifyMail;
 
 class researchApplicationController extends Controller
 {
@@ -234,25 +236,24 @@ class researchApplicationController extends Controller
                           $message->to($details['to'])->subject($details['subject']);
                       });*/
 
-                $mail = \Mail::to(trim($details['to']))->send(new Mail\SendPassword($details));
-                if (count($mail->failures()) > 0) {
 
-                    $errors = '';
-                    foreach ($mail->failures() as $email_address) {
-                        $errors .= $email_address;
-                    }
+                ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
+                try {
+                    ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
+                    Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details));
+
                     return response()->json([
-                            'success' => false,
-                            'message' => $errors]
+                            'success' => TRUE,
+                            'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
+                    );
+                } catch (\Exception $e) {
+                    return response()->json([
+                            'success' => FALSE,
+                            'message' => "لم يتم إرسال رسالة إلى المحكمين",]
                     );
                 }
 
-                ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
 
-                return response()->json([
-                        'success' => TRUE,
-                        'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
-                );
             }
         }
 

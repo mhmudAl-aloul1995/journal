@@ -239,14 +239,16 @@ class researchApplicationController extends Controller
 
                 ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
                 try {
+
                     ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
+                    dd(Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details)));
+
                     Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details));
 
                     return response()->json([
                             'success' => TRUE,
                             'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
                     );
-                    dd(Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details)));
                 } catch (\Exception $e) {
                     return response()->json([
                             'success' => FALSE,

@@ -25,6 +25,7 @@ use View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EvaluationsUser;
 use App\Models\ResearcherEvaluation;
+use App\Mail;
 
 class researchApplicationController extends Controller
 {
@@ -41,6 +42,15 @@ class researchApplicationController extends Controller
 
     public function index()
     {
+        /*(int)$money = 500;
+        for ($i = 0; $i <61; $i++) {
+
+
+            (int)$money += (int)$money * .05;
+
+
+        }
+        dd(number_format((int)$money, 1, ",", ","));*/
 
 
         $researchApplication = ResearchApplication::where('user_id', Auth::id())->get();
@@ -209,11 +219,23 @@ class researchApplicationController extends Controller
                     'url' => url('evaluator'),//url('login'),
                     'password' => $password,
                     'username' => $username,
-                    'email' => $email,
-                    'res_title' => ResearchApplication::find($data['research_application_id'])->research_title
+                    'to' => $email,
+                    'res_title' => ResearchApplication::find($data['research_application_id'])->research_title,
+                    'subject' => 'تحكيم بحث مجلة جامعة غزة للأبحاث والدراسات',
+                    'from_name' => "عمادة البحث العلمي والدراسات العليا جامعة غزة",
+                    'from' => 'mhmudaloul@gmail.com',
+
                 ];
+
                 $EvaluationsUser = EvaluationsUser::Create(['evaluator_id' => $value, 'research_application_id' => $data['research_application_id']]);
-                $mail = \Mail::to(trim($email))->send(new \App\Mail\SendPassword($details));
+
+          /*      $mail = Mail::send('researchEvalauationEmail', $details, function ($message) use ($details) {
+                    $message->from($details['from'], $details['from_name']);
+                    $message->to($details['to'])->subject($details['subject']);
+                });*/
+
+                   $mail = \Mail::to(trim($details['to']))->send(new Mail\SendPassword($details));
+                   dd($mail);
 
             }
 

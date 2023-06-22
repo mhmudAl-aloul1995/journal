@@ -14,7 +14,6 @@ return [
     */
 
     'default' => env('MAIL_MAILER', 'smtp'),
-    'driver' => env('MAIL_DRIVER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -40,8 +39,8 @@ return [
             'host' => env('MAIL_HOST', 'smtp.gmail.com'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => "research@gu.edu.ps",
-            'password' => "22222222",
+            'username' => "mhmudaloul@gmail.com",
+            'password' => "Qqqq1111@",
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
@@ -130,4 +129,3 @@ return [
     ]
 
 ];
-

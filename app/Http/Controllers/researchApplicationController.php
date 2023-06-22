@@ -246,6 +246,7 @@ class researchApplicationController extends Controller
                             'success' => TRUE,
                             'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
                     );
+                    dd(Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details)));
                 } catch (\Exception $e) {
                     return response()->json([
                             'success' => FALSE,

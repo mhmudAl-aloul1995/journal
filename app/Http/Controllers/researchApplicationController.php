@@ -229,23 +229,33 @@ class researchApplicationController extends Controller
 
                 $EvaluationsUser = EvaluationsUser::Create(['evaluator_id' => $value, 'research_application_id' => $data['research_application_id']]);
 
-          /*      $mail = Mail::send('researchEvalauationEmail', $details, function ($message) use ($details) {
-                    $message->from($details['from'], $details['from_name']);
-                    $message->to($details['to'])->subject($details['subject']);
-                });*/
+                /*      $mail = Mail::send('researchEvalauationEmail', $details, function ($message) use ($details) {
+                          $message->from($details['from'], $details['from_name']);
+                          $message->to($details['to'])->subject($details['subject']);
+                      });*/
 
-                   $mail = \Mail::to(trim($details['to']))->send(new Mail\SendPassword($details));
-                   dd($mail);
+                $mail = \Mail::to(trim($details['to']))->send(new Mail\SendPassword($details));
+                if (count($mail->failures()) > 0) {
 
+                    $errors = '';
+                    foreach ($mail->failures() as $email_address) {
+                        $errors .= $email_address;
+                    }
+                    return response()->json([
+                            'success' => false,
+                            'message' => $errors]
+                    );
+                }
+
+                ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
+
+                return response()->json([
+                        'success' => TRUE,
+                        'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
+                );
             }
-
-            ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
-
-            return response()->json([
-                    'success' => TRUE,
-                    'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
-            );
         }
+
         if ($data['app_status'] == 3) {
             $ResearcherEvaluation = ResearcherEvaluation::where(['research_application_id' => $data['research_application_id']])->get()->count();
             $final_response = ResearcherEvaluation::where(['finel_response' => 1, 'research_application_id' => $data['research_application_id']])->get()->count();
@@ -299,7 +309,8 @@ class researchApplicationController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         $data = $request->all();
 
@@ -353,7 +364,8 @@ class researchApplicationController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public
+    function update(Request $request)
     {
         $data = $request->all();
         if ($data['app_status'] == 2) {
@@ -416,7 +428,8 @@ class researchApplicationController extends Controller
 
     }
 
-    public function destroy(Request $request, $id)
+    public
+    function destroy(Request $request, $id)
     {
 
         $researchers = Researcher::where('research_id', $id)->delete();
@@ -432,7 +445,8 @@ class researchApplicationController extends Controller
         return response(['message' => 'فشلت العملية'], 500);
     }
 
-    public function is_done_notes(Request $request)
+    public
+    function is_done_notes(Request $request)
     {
         $data = $request->all();
 

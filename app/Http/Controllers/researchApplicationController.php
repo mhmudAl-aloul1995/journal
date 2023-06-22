@@ -238,10 +238,11 @@ class researchApplicationController extends Controller
 
 
                 ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
+                dd(Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details)));
+
                 try {
 
                     ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
-                    dd(Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details)));
 
                     Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details));
 

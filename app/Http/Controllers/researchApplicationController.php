@@ -326,9 +326,9 @@ class researchApplicationController extends Controller
             ]);
         } else {
             $request->validate([
-                "research_money_file" => "required",
+               /* "research_money_file" => "required",
                 "research_file" => "required",//|mimetypes:application/pdf
-                "research_title" => "required",//|mimetypes:application/pdf
+                "research_title" => "required",//|mimetypes:application/pdf*/
             ]);
         }
 

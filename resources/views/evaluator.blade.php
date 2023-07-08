@@ -550,6 +550,7 @@
                 url: "{{url('researchAppNoteShow')}}",
                 data: function (d) {
                     d.research_application_id = $('#research_application_id').val();
+                    d.show_all = 0;
 
                 }
             },

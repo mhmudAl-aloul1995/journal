@@ -118,9 +118,13 @@ class evaluatorController extends Controller
         $users = ResearchApplicationNote::query();
         $research_application_id = isset($data['research_application_id']) && $data['research_application_id'] != null ? $data['research_application_id'] : '';
 
-        $users->whereHas('evaluator', function ($q) {
-            $q->where('evaluator_id', Auth::id());
-        });
+        if (isset($data['show_all']) && $data['show_all']==0) {
+            $users->whereHas('evaluator', function ($q) {
+                $q->where('evaluator_id', Auth::id());
+            });
+
+        }
+
         $users->whereHas('research_application', function ($q) use ($research_application_id) {
             $q->where('research_application_id', $research_application_id);
         });

@@ -326,22 +326,22 @@ class researchApplicationController extends Controller
             ]);
         } else {
             $request->validate([
-               /* "research_money_file" => "required",
+                "research_money_file" => "required",
                 "research_file" => "required",//|mimetypes:application/pdf
-                "research_title" => "required",//|mimetypes:application/pdf*/
+                "research_title" => "required",//|mimetypes:application/pdf
             ]);
         }
 
         if ($request->research_money_file && $request->file()) {
 
-            $fileName = time() . '_research_money_file';
+            $fileName = time() . '_' . $request->research_money_file->getClientOriginalExtension();
             $filePath = $request->file('research_money_file')->storeAs('research_money_file', $fileName);
             $data['research_money_file'] = $fileName;
 
         }
         if ($request->research_file && $request->file()) {
 
-            $fileName = time() . '_research_file';
+            $fileName = time() . '_' . $request->research_file->getClientOriginalExtension();
             $filePath = $request->file('research_file')->storeAs('research_file', $fileName);
             $data['research_file'] = $fileName;
 
@@ -383,7 +383,7 @@ class researchApplicationController extends Controller
 
                     ]);
                 }
-                $fileName = time() . '_research_file_updated';
+                $fileName = time() . '_' . $request->research_file_updated->getClientOriginalExtension();
                 $filePath = $request->file('research_file_updated')->storeAs('researches_updates', $fileName);
                 $data['research_file_updated'] = $fileName;//'/storage/app/' . $filePath;
 
@@ -402,7 +402,7 @@ class researchApplicationController extends Controller
 
                     ]);
                 }
-                $fileName = time() . '_proofreader_file' ;
+                $fileName = time() . '_' . $request->proofreader_file->getClientOriginalExtension();
                 $filePath = $request->file('proofreader_file')->storeAs('proofreader_file', $fileName);
                 $data['proofreader_file'] = $fileName;//'/storage/app/' . $filePath;
 

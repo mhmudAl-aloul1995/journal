@@ -178,7 +178,7 @@ class evaluatorController extends Controller
         $data['evaluator_id'] = Auth::id();
         if ($request->note_file && $request->file()) {
 
-            $fileName = time() . '_note_file';
+            $fileName = time() . '_note_file' . $request->note_file->getClientOriginalExtension();
             $filePath = $request->file('note_file')->storeAs('note_file', $fileName);
             $data['note_file'] = $fileName;
 

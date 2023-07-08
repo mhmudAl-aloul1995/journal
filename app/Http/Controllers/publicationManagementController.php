@@ -267,14 +267,14 @@ class publicationManagementController extends Controller
 
         if ($request->research_money_file && $request->file()) {
 
-            $fileName = time() . '_' . $request->research_money_file->getClientOriginalName();
+            $fileName = time() . '_research_money_file';
             $filePath = $request->file('research_money_file')->storeAs('research_money_file', $fileName);
             $data['research_money_file'] = $fileName;
 
         }
         if ($request->research_file && $request->file()) {
 
-            $fileName = time() . '_' . $request->research_file->getClientOriginalName();
+            $fileName = time() . '_research_file';
             $filePath = $request->file('research_file')->storeAs('research_file', $fileName);
             $data['research_file'] = $fileName;
 
@@ -316,7 +316,7 @@ class publicationManagementController extends Controller
 
                 ]);
             }
-            $fileName = time() . '_' . $request->res_link->getClientOriginalName();
+            $fileName = time() . '_res_link';
             $filePath = $request->file('res_link')->storeAs('researches', $fileName);
             $data['res_link'] = '/storage/app/' . $filePath;
 

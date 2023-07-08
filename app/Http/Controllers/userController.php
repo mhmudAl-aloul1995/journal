@@ -150,7 +150,7 @@ class userController extends Controller
 
                 ]);
             }
-            $fileName = time() . '_' . $request->avatar->getClientOriginalName();
+            $fileName = time() . '_avatar';
             $filePath = $request->file('avatar')->storeAs('avatar', $fileName);
             $data['img'] = $fileName;//'/storage/app/' . $filePath;
 

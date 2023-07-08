@@ -334,14 +334,14 @@ class researchApplicationController extends Controller
 
         if ($request->research_money_file && $request->file()) {
 
-            $fileName = time() . '_' . $request->research_money_file->getClientOriginalExtension();
+            $fileName = time() . '_file.' . $request->research_money_file->getClientOriginalExtension();
             $filePath = $request->file('research_money_file')->storeAs('research_money_file', $fileName);
             $data['research_money_file'] = $fileName;
 
         }
         if ($request->research_file && $request->file()) {
 
-            $fileName = time() . '_' . $request->research_file->getClientOriginalExtension();
+            $fileName = time() . '_file.' . $request->research_file->getClientOriginalExtension();
             $filePath = $request->file('research_file')->storeAs('research_file', $fileName);
             $data['research_file'] = $fileName;
 
@@ -383,7 +383,7 @@ class researchApplicationController extends Controller
 
                     ]);
                 }
-                $fileName = time() . '_' . $request->research_file_updated->getClientOriginalExtension();
+                $fileName = time() . '_file.' . $request->research_file_updated->getClientOriginalExtension();
                 $filePath = $request->file('research_file_updated')->storeAs('researches_updates', $fileName);
                 $data['research_file_updated'] = $fileName;//'/storage/app/' . $filePath;
 
@@ -402,7 +402,7 @@ class researchApplicationController extends Controller
 
                     ]);
                 }
-                $fileName = time() . '_' . $request->proofreader_file->getClientOriginalExtension();
+                $fileName = time() . '_file.' . $request->proofreader_file->getClientOriginalExtension();
                 $filePath = $request->file('proofreader_file')->storeAs('proofreader_file', $fileName);
                 $data['proofreader_file'] = $fileName;//'/storage/app/' . $filePath;
 

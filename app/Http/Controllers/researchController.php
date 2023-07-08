@@ -145,7 +145,7 @@ class researchController extends Controller
 
                 ]);
             }
-            $fileName = time() . '_' . $request->res_link->getClientOriginalExtension();
+            $fileName = time() . '_file.' . $request->res_link->getClientOriginalExtension();
             $filePath = $request->file('res_link')->storeAs('researches', $fileName);
             $data['res_link'] = '/storage/app/' . $filePath;
 
@@ -199,7 +199,7 @@ class researchController extends Controller
 
                 ]);
             }
-            $fileName = time() . '_' . $request->res_link->getClientOriginalExtension();
+            $fileName = time() . '_file.' . $request->res_link->getClientOriginalExtension();
             $filePath = $request->file('res_link')->storeAs('researches', $fileName);
             $data['res_link'] = '/storage/app/' . $filePath;
 

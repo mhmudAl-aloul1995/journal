@@ -1,0 +1,62 @@
+@media only print {
+	body {
+		font-size: 11pt;
+		background: #FFFFFF !important;
+	}
+	@page {
+		margin: 2cm auto 2cm auto;
+	}
+	#topBar, #header,#top-out, #footer-out, #copyright-out, #mdmContainer, #footer, #print_icon, #p_nav, #delete_col,#toTop {
+		display: none;
+	}
+	thead {
+		display: table-header-group;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		width: 100%;
+	}
+	table td {
+		padding: 3px;
+	}
+	.listTable td {
+		border: 1px #999999 solid;
+	}
+	a {
+		text-decoration: none;
+	}
+
+	img {
+		border: 0
+	}
+	.bold {
+		font-weight: bold;
+	}
+	.close, .print, .breadcrumb , .alternate {
+		display: none;
+	}
+	a[href]:after {
+		 content: none !important;
+	}
+	#oflw {
+		overflow: visible;
+		max-height: 100%;
+	}
+	.page_break {
+		page-break-before: always;
+		break-before: always;
+	}
+	
+    .modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        overflow: visible!important;
+    }
+    .modal-content {
+    	border-top: 0;
+    }
+}

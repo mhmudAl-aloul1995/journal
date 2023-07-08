@@ -37,7 +37,7 @@ return [
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.gmail.com'),
-            'port' => env('MAIL_PORT', 25),
+            'port' => 25,//env('MAIL_PORT', 25),
             'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
             'username' => "mhmudaloul@gmail.com",
             'password' => "Qqqq1111@",

@@ -205,6 +205,7 @@ class researchApplicationController extends Controller
         $data = $request->all();
 
         //  $data['user_id'] = Auth::id();
+        $EvaluationsUser = null;
         if ($data['app_status'] == 2) {
 
 
@@ -229,7 +230,6 @@ class researchApplicationController extends Controller
 
                 ];
 
-                $EvaluationsUser = EvaluationsUser::Create(['evaluator_id' => $value, 'research_application_id' => $data['research_application_id']]);
 
                 /*      $mail = Mail::send('researchEvalauationEmail', $details, function ($message) use ($details) {
                           $message->from($details['from'], $details['from_name']);
@@ -237,19 +237,14 @@ class researchApplicationController extends Controller
                       });*/
 
 
-                ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
-                dd(Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details)));
-
                 try {
+                    $EvaluationsUser = EvaluationsUser::updateOrCreate(['evaluator_id' => $value, 'research_application_id' => $data['research_application_id']]);
 
                     ResearchApplication::find($data['research_application_id'])->update(['app_status' => 2]);
 
-                    Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details));
+                    /*                    Mail::to('mhmudaloul@gmail.com')->send(new SendPassword($details));*/
 
-                    return response()->json([
-                            'success' => TRUE,
-                            'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
-                    );
+
                 } catch (\Exception $e) {
                     return response()->json([
                             'success' => FALSE,
@@ -259,6 +254,10 @@ class researchApplicationController extends Controller
 
 
             }
+            return response()->json([
+                    'success' => TRUE,
+                    'message' => "تم إرسال البحث إلى لجنة التحكيم بنجاح",]
+            );
         }
 
         if ($data['app_status'] == 3) {
@@ -314,8 +313,7 @@ class researchApplicationController extends Controller
         ]);
     }
 
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
         $data = $request->all();
 
@@ -369,8 +367,7 @@ class researchApplicationController extends Controller
         ]);
     }
 
-    public
-    function update(Request $request)
+    public function update(Request $request)
     {
         $data = $request->all();
         if ($data['app_status'] == 2) {
@@ -433,8 +430,7 @@ class researchApplicationController extends Controller
 
     }
 
-    public
-    function destroy(Request $request, $id)
+    public function destroy(Request $request, $id)
     {
 
         $researchers = Researcher::where('research_id', $id)->delete();
@@ -450,8 +446,7 @@ class researchApplicationController extends Controller
         return response(['message' => 'فشلت العملية'], 500);
     }
 
-    public
-    function is_done_notes(Request $request)
+    public function is_done_notes(Request $request)
     {
         $data = $request->all();
 

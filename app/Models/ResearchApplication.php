@@ -111,7 +111,7 @@ class ResearchApplication extends Model
     public function evaluator_evaluations()
     {
 
-        return $this->hasOne(ResearcherEvaluation::class, 'research_application_id');
+        return $this->hasOne(ResearcherEvaluation::class, 'research_application_id')->where('evaluator_id',Auth::id());
 
     }
 

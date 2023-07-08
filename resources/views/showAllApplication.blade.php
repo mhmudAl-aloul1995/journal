@@ -216,6 +216,7 @@
                             <div class="table-toolbar">
                                 <div class="row">
                                     <div class="col-md-6">
+
                                         <h3>{{$value->user->title.$value->user->name}}<h2>
 
                                     </div>

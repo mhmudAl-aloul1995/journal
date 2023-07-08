@@ -118,11 +118,9 @@ class evaluatorController extends Controller
         $users = ResearchApplicationNote::query();
         $research_application_id = isset($data['research_application_id']) && $data['research_application_id'] != null ? $data['research_application_id'] : '';
 
-        if ($is_researcher == false) {
-            $users->whereHas('evaluator', function ($q) {
-                $q->where('evaluator_id', Auth::id());
-            });
-        }
+        $users->whereHas('evaluator', function ($q) {
+            $q->where('evaluator_id', Auth::id());
+        });
         $users->whereHas('research_application', function ($q) use ($research_application_id) {
             $q->where('research_application_id', $research_application_id);
         });
@@ -246,7 +244,6 @@ class evaluatorController extends Controller
             'message' => "تم التعديل بنجاح"
         ]);
     }
-
 
     public function researchAppNoteDelete(Request $request, $id)
     {

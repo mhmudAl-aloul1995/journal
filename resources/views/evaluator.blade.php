@@ -378,7 +378,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" onclick="submitForm('evaluator')" class="btn green ok">حفظ التغييرات
+            <button type="button" onclick="submitForm('evaluator')" class="btn  green ok">حفظ التغييرات
             </button>
             <button type="button" data-dismiss="modal" class="btn btn-default">اغلاق</button>
         </div>
@@ -468,7 +468,9 @@
                                 <th>الملاحظة</th>
                                 <th>المرفق</th>
                                 <th>تم تنفيذها؟</th>
+{{--
                                 <th> إجراء</th>
+--}}
 
                             </tr>
                             </thead>
@@ -523,7 +525,7 @@
             buttons: [
                 {
                     text: 'تحديث',
-                    className: 'btn green reload publicationManagementTable',
+                    className: 'btn green reload evaluatorTable',
                     action: function (e, dt, node, config) {
                         dt.ajax.reload();
                     }
@@ -571,7 +573,9 @@
                 {className: 'text-center', data: 'note', name: 'note', searchable: true},
                 {className: 'text-center', data: 'note_file', name: 'note_file', searchable: true},
                 {className: 'text-center', data: 'is_done', name: 'is_done', searchable: true},
+/*
                 {className: 'text-left', data: 'action', name: 'action', searchable: false},
+*/
             ],
         });
 

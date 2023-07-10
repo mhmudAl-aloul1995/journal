@@ -54,7 +54,7 @@ class publicationManagementController extends Controller
 
         $data['id'] = $id;
         $data['user'] = ResearchApplication::find($id)->user;
-        $data['evaluations'] = ResearchApplication::find($id)->researcher_evaluations;
+        $data['evaluations'] = ResearchApplication::with('researcher_notes')->find($id);
         $data['answer_evaluation_6'] = ['', 'صالح للنشر كما هو', 'صالح للنشر بعد إجراءات مرفقة', 'صالح للنشر بعد إجراءات تعديلات جوهرية مرفقة', ' غير صالح للنشر'];
 
         return View::make('showAllApplication', $data);
@@ -104,6 +104,13 @@ class publicationManagementController extends Controller
 
 
             })
+            ->addColumn('res_file_new', function ($ctr) {
+                if ($ctr->res_file_new_updated == null) {
+                    return null;
+                }
+
+                return '<a target="_blank" href="' . $ctr->res_file_new_updated . '">الرابط</a>';
+            })
             ->addColumn('is_pay', function ($ctr) {
 
                 if ($ctr->is_pay == 1) {
@@ -148,10 +155,14 @@ class publicationManagementController extends Controller
                                                                 <a target="_blank"  href="' . url('') . '/showAllApplication/' . $ctr->id . '">
                                                                     <i class="icon-eye"></i>  الطلب  </a>
                                                             </li>
+                                                                  <li>
+                                                                <a onclick="showModal(`researchApplication`,' . $ctr->id . ')" href="javascript:;" >
+                                                                    <i class="icon-eye"></i>  ملف البحث  </a>
+                                                            </li>
                                                             </ul>
                                                     </div>';
             })
-            ->rawColumns(['prf_file' => 'prf_file', 'action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay', 'evaluators' => 'evaluators'])
+            ->rawColumns(['res_file_new', 'prf_file' => 'prf_file', 'action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay', 'evaluators' => 'evaluators'])
             ->make(true);
     }
 

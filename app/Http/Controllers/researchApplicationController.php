@@ -139,12 +139,13 @@ class researchApplicationController extends Controller
                                                             </ul>
                                                     </div>';
             })
-            ->rawColumns(['action' => 'action', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
+            ->rawColumns(['action' => 'action', 'res_file_new' => 'res_file_new', 'res_file' => 'res_file', 'res_money' => 'res_money', 'app_status' => 'app_status', 'is_pay' => 'is_pay'])
             ->make(true);
     }
 
     public function edit(Request $request, $id)
     {
+
 
         $researchApplication = ResearchApplication::withCount('researcher_notes')->where('id', $id)->first();
 
@@ -316,32 +317,31 @@ class researchApplicationController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         $data['user_id'] = Auth::id();
         $data['is_pay'] = 1;
         if (isset($data['is_commitment']) && $data['is_commitment'] == 1) {
             $request->validate([
-                "research_money_file" => "required",
+                "research_money_file" => "required|mimes:png,jpg,jpeg",
 
             ]);
-        } else {
+        } else if (isset($data['id']) && $data['id'] = 0 || $data['id'] = null || $data['id'] = "") {
             $request->validate([
-                "research_money_file" => "required",
-                "research_file" => "required",//|mimetypes:application/pdf
-                "research_title" => "required",//|mimetypes:application/pdf
+                "research_money_file" => "required|mimes:png,jpg,jpeg",
+                "research_file" => "required|mimes:doc,docx",//|mimetypes:application/pdf
+                "research_title" => "required|file",//|mimetypes:application/pdf
             ]);
         }
 
         if ($request->research_money_file && $request->file()) {
 
-            $fileName = time() . '_file.' . $request->research_money_file->getClientOriginalExtension();
+            $fileName = time() . '_file.' . $request->research_money_file->getClientOriginalName();
             $filePath = $request->file('research_money_file')->storeAs('research_money_file', $fileName);
             $data['research_money_file'] = $fileName;
 
         }
         if ($request->research_file && $request->file()) {
 
-            $fileName = time() . '_file.' . $request->research_file->getClientOriginalExtension();
+            $fileName = time() . '_file.' . $request->research_file->getClientOriginalName();
             $filePath = $request->file('research_file')->storeAs('research_file', $fileName);
             $data['research_file'] = $fileName;
 
@@ -370,24 +370,49 @@ class researchApplicationController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
+
+        if (isset($data['add_file']) == null) {
+            if (!$request->validate([
+                "research_file_new" => "required|mimes:doc,docx"
+            ])) {
+                return response()->json([
+                    'success' => FALSE,
+                    // 'message' => "يجب أن يكون الملف pdf"
+
+                ]);
+
+
+            }
+            $fileName = time() . '_file.' . $request->research_file_new->getClientOriginalName();
+            $filePath = $request->file('research_file_new')->storeAs('research_file_new', $fileName);
+            $data['research_file_new'] = $fileName;//'/storage/app/' . $filePath;
+            $research = ResearchApplication::find($data['id']);
+            $research->update($data);
+            return response()->json([
+                'success' => True,
+                'message' => "تمت الإضافة بنجاح"
+            ]);
+        }
+
+
         if ($data['app_status'] == 2) {
 
 
-            if ($request->file()) {
-                if (!$request->validate([
-                    "research_file_updated" => "required"
-                ])) {
-                    return response()->json([
-                        'success' => FALSE,
-                        // 'message' => "يجب أن يكون الملف pdf"
+            if (!$request->validate([
+                "research_file_updated" => "required|mimes:doc,docx"
+            ])) {
+                return response()->json([
+                    'success' => FALSE,
+                    // 'message' => "يجب أن يكون الملف pdf"
 
-                    ]);
-                }
-                $fileName = time() . '_file.' . $request->research_file_updated->getClientOriginalExtension();
-                $filePath = $request->file('research_file_updated')->storeAs('researches_updates', $fileName);
-                $data['research_file_updated'] = $fileName;//'/storage/app/' . $filePath;
-
+                ]);
             }
+
+            $fileName = time() . '_file.' . $request->research_file_updated->getClientOriginalName();
+            $filePath = $request->file('research_file_updated')->storeAs('researches_updates', $fileName);
+            $data['research_file_updated'] = $fileName;//'/storage/app/' . $filePath;
+
+
         }
         if ($data['app_status'] == 3) {
 
@@ -402,7 +427,7 @@ class researchApplicationController extends Controller
 
                     ]);
                 }
-                $fileName = time() . '_file.' . $request->proofreader_file->getClientOriginalExtension();
+                $fileName = time() . '_file.' . $request->proofreader_file->getClientOriginalName();
                 $filePath = $request->file('proofreader_file')->storeAs('proofreader_file', $fileName);
                 $data['proofreader_file'] = $fileName;//'/storage/app/' . $filePath;
 

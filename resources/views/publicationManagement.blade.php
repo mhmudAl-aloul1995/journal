@@ -154,6 +154,91 @@
             <button type="button" data-dismiss="modal" class="btn btn-default">اغلاق</button>
         </div>
     </div>
+    <div class="modal container fadeIn" id="researchApplicationModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN SAMPLE FORM PORTLET-->
+
+                    <div class="portlet-title">
+                        <div class="caption font-green-haze">
+                            <i class="icon-wallet font-green-haze"></i>
+                            <span class="caption-subject bold uppercase"></span>اضافة ملف
+                        </div>
+                    </div>
+
+
+                    <form method="POST" action="" data-toggle="validator" id="researchApplicationForm"
+                          accept-charset="UTF-8"
+                          class="form-horizontal form" role="form" enctype="multipart/form-data">
+
+                        <input name="id" type="hidden" value="">
+                        <input name="research_application_id" type="hidden" value="">
+                        <input name="add_file" type="hidden" value="1">
+
+                        <div class="portlet-body form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-md-line-input">
+                                                <label for="research_file_new" class="col-md-4  control-label">اضافة ملف
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <input required="" type="file" name="research_file_new" value=""
+                                                           class="form-control" placeholder="اضافة ملف">
+                                                    <div class="form-control-focus"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group form-md-line-input ">
+                                                                                <label class="col-md-4 control-label" for="orph_degre">
+                                                                                    النوع</label>
+
+                                                                                <div class="col-md-8">
+                                                                                    <select required name="cust_type"
+                                                                                            data-placeholder="النوع" data-allow-clear="true"
+                                                                                            class="form-control select2 ">
+                                                                                        <option value=""></option>
+                                                                                        <option value="0">مورد</option>
+                                                                                        <option value="1">زبون</option>
+
+                                                                                    </select>
+                                                                                    <div class="form-control-focus"></div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                -->
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </form>
+
+                    <!-- END SAMPLE FORM PORTLET-->
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="submitForm('researchApplication')" class="btn green ok">حفظ التغييرات
+            </button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">اغلاق</button>
+        </div>
+    </div>
 
     {{--
         <div class="row">
@@ -249,6 +334,7 @@
                                 <th> إسم الباحث</th>
                                 <th> عنوان البحث</th>
                                 <th> مرفق البحث</th>
+                                <th> مرفق البحث المنقح</th>
                                 <th> مرفق الدفع</th>
                                 <th> مرفق التعديلات</th>
                                 <th> المحكمين</th>
@@ -305,11 +391,12 @@
             columns: [
                 {className: 'text-center', data: 'user.name', name: 'user.name', searchable: true},
                 {className: 'text-center', data: 'research_title', name: 'research_title', searchable: true},
-                {className: 'text-center', data: 'res_file', name: 'research_title', searchable: true},
-                {className: 'text-center', data: 'res_money', name: 'research_title', searchable: true},
-                {className: 'text-center', data: 'prf_file', name: 'prf_file', searchable: true},
+                {className: 'text-center', data: 'res_file', name: 'research_title', searchable: false},
+                {className: 'text-center', data: 'res_file_new', name: 'res_file_new', searchable: false},
+                {className: 'text-center', data: 'res_money', name: 'research_title', searchable: false},
+                {className: 'text-center', data: 'prf_file', name: 'prf_file', searchable: false},
                 {className: 'text-center', data: 'evaluators', name: 'evaluators', searchable: true},
-                {className: 'text-center', data: 'app_status', name: 'app_status', searchable: true},
+                {className: 'text-center', data: 'app_status', name: 'app_status', searchable: false},
                 {className: 'text-left', data: 'action', name: 'action', searchable: false},
             ],
         });

@@ -83,7 +83,8 @@ class evaluatorController extends Controller
 
         return Datatables::of($users)
             ->addColumn('res_file', function ($ctr) {
-                return '<a target="_blank" href="' . $ctr->res_file . '">الرابط</a>';
+
+                return '<a target="_blank" href="' . $ctr->res_file_new_updated . '">الرابط</a>';
             })
             ->addColumn('res_money', function ($ctr) {
                 return '<a target="_blank" href="' . $ctr->res_money . '">الرابط</a>';
@@ -178,7 +179,7 @@ class evaluatorController extends Controller
         $data['evaluator_id'] = Auth::id();
         if ($request->note_file && $request->file()) {
 
-            $fileName = time() . '_note_file.' . $request->note_file->getClientOriginalExtension();
+            $fileName = time() . '_note_file.' . $request->note_file->getClientOriginalName();
             $filePath = $request->file('note_file')->storeAs('note_file', $fileName);
             $data['note_file'] = $fileName;
 

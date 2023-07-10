@@ -209,7 +209,7 @@
 
                     </div>
                 </div>
-                @foreach($evaluations as $value)
+                @foreach($evaluations->researcher_evaluations as $value)
 
                     <div class="portlet-body">
                         <div class="table-toolbar">
@@ -292,21 +292,50 @@
 
                                 </tbody>
                                 <tfoot>
-                                <tr >
+                                <tr>
                                     <td>محصلة الرأي بخصوص نشر البحث</td>
                                     <td colspan="3">{{$value->answer_evaluation_6==null?'':$answer_evaluation_6[$value->answer_evaluation_6]}}</td>
 
 
-
                                 </tr>
-                                <tr >
+                                <tr>
                                     <td>إعتماد نهائي</td>
-                                    <td >{{$value->finel_response==1?'نعم':'لا'}}</td>
+                                    <td>{{$value->finel_response==1?'نعم':'لا'}}</td>
 
 
                                 </tr>
+
                                 </tfoot>
+
                             </table>
+                            <table class="table table-striped  "
+                                   id="">
+                                <thead class="alert-danger">
+                                <tr>
+                                    <th>الملاحظة</th>
+                                    <th>المرفق</th>
+                                    <th>تم تنفيذها؟</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach(\App\Models\ResearchApplicationNote::where(['research_application_id'=>$value->research_application->id,'evaluator_id'=>$value->user->id])->get() as $not)
+                                    <tr>
+                                        <td>{{$not->note}}</td>
+                                        <td> <?php
+                                            if ($not->note_file_updated) {
+                                                echo "<a href='$not->note_file_updated'>الرابط</a>";
+                                    } else {
+                                                echo "";
+                                            }
+
+                                            ?> </td>
+                                        <td>{{$not->note}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                 @endforeach
@@ -346,21 +375,6 @@
                     </div>
                     <div class="table-container">
 
-                        <table class="table table-striped  " id="publicationManagementEvaluatorNoteTable">
-                            <thead>
-                            <tr>
-                                <th> #</th>
-                                <th>الملاحظة</th>
-                                <th>المرفق</th>
-                                <th>تم تنفيذها؟</th>
-                                <th> إجراء</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -421,7 +435,7 @@
                 url: "{{url('researchAppNoteShow')}}",
                 data: function (d) {
                     d.research_application_id = {{$id}}
-                    d.show_all = 1
+                        d.show_all = 1
                 }
             },
             dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",

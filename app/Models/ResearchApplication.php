@@ -48,9 +48,10 @@ class ResearchApplication extends Model
         'is_pay',
         'research_file_updated',
         'proofreader_id',
-        'proofreader_file'
+        'proofreader_file',
+        'research_file_new'
     ];
-    protected $appends = ['prf_file', 'res_file', 'res_money', 'res_file_updated'];
+    protected $appends = ['prf_file', 'res_file', 'res_money', 'res_file_updated','res_file_new_updated'];
 
     public function user()
     {
@@ -71,7 +72,10 @@ class ResearchApplication extends Model
     {
         return $this->research_file ? 'storage/app/research_file/' . $this->research_file : $this->research_file;
     }
-
+    public function getResFileNewUpdatedAttribute()
+    {
+        return $this->research_file_new ? 'storage/app/research_file_new/' . $this->research_file_new : $this->research_file_new;
+    }
     public function getPrfFileAttribute()
     {
         return $this->proofreader_file ? 'storage/app/proofreader_file/' . $this->proofreader_file : null;
